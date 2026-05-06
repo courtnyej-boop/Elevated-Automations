@@ -175,9 +175,9 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
       <div class="mission-chip running"><div class="chip-dot running"></div>Lead Gen Pipeline</div>
       <div class="mission-chip"><div class="chip-dot done"></div>Agency Website</div>
       <div class="mission-chip"><div class="chip-dot done"></div>Voice Agent</div>
-      <div class="mission-chip"><div class="chip-dot idle"></div>Email Sequences</div>
-      <div class="mission-chip"><div class="chip-dot idle"></div>LinkedIn Automation</div>
-      <div class="mission-chip"><div class="chip-dot idle"></div>ElevenLabs Calling</div>
+      <div class="mission-chip"><div class="chip-dot done"></div>Email Sequences</div>
+      <div class="mission-chip"><div class="chip-dot done"></div>Google Sheets CRM</div>
+      <div class="mission-chip"><div class="chip-dot done"></div>ElevenLabs Calling</div>
     </div>
     <div class="messages" id="messages">
       <div class="msg">
@@ -222,7 +222,7 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
       </div>
       <div class="input-footer">
         <div class="quick-cmds">
-          <div class="quick-cmd" onclick="setCmd('Find 25 SaaS leads in fintech')">Find leads</div>
+          <div class="quick-cmd" onclick="setCmd('Find 25 SaaS CEO leads')">Find leads</div>
           <div class="quick-cmd" onclick="setCmd('Run the full lead gen pipeline')">Run pipeline</div>
           <div class="quick-cmd" onclick="setCmd('Write outreach copy for hot leads')">Write copy</div>
           <div class="quick-cmd" onclick="setCmd('What agents are currently running?')">Agent status</div>
@@ -236,7 +236,7 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
       <div class="panel-title"><span>Active pipelines</span><span style="color:var(--accent);font-size:0.65rem;">3</span></div>
       <div class="pipeline-item"><div class="pipeline-header"><span class="pipeline-name">Lead Gen Pipeline</span><span class="pipeline-badge pb-live">Live</span></div><div class="pipeline-meta">Next run: 8:00 AM tomorrow</div><div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div></div>
       <div class="pipeline-item"><div class="pipeline-header"><span class="pipeline-name">Voice Agent</span><span class="pipeline-badge pb-live">Live</span></div><div class="pipeline-meta">ElevenLabs live</div><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div></div>
-      <div class="pipeline-item"><div class="pipeline-header"><span class="pipeline-name">Email Sequences</span><span class="pipeline-badge pb-building">Building</span></div><div class="pipeline-meta">Phase 2 — not started</div><div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div></div>
+      <div class="pipeline-item"><div class="pipeline-header"><span class="pipeline-name">Email Sequences</span><span class="pipeline-badge pb-live">Live</span></div><div class="pipeline-meta">Apollo sequence active</div><div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div></div>
     </div>
     <div class="sidebar-divider"></div>
     <div class="panel-section">
@@ -260,10 +260,11 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
 <div class="modal" id="modal">
   <div class="modal-card">
     <h2 class="modal-title">Configure Command Center</h2>
-    <p class="modal-sub">Connect your APIs and n8n webhook to activate the full army. Keys stored in session only.</p>
+    <p class="modal-sub">Connect your APIs and n8n webhooks to activate the full army. Keys stored in session only.</p>
     <div class="field"><label>Anthropic API Key</label><input type="password" id="anthropicKey" placeholder="sk-ant-..." /></div>
     <div class="field"><label>n8n Webhook URL</label><input type="text" id="n8nWebhook" placeholder="https://your-n8n.cloud/webhook/..." /></div>
     <div class="field"><label>n8n TTS Webhook URL (Voice)</label><input type="text" id="ttsWebhook" placeholder="https://your-n8n.cloud/webhook/tts" /></div>
+    <div class="field"><label>n8n Lead Finder Webhook URL</label><input type="text" id="leadWebhook" placeholder="https://your-n8n.cloud/webhook/leads" /></div>
     <div class="field"><label>OpenAI API Key (Transcription)</label><input type="password" id="openaiKey" placeholder="sk-..." /></div>
     <div class="field"><label>ElevenLabs Voice ID (optional)</label><input type="text" id="voiceId" placeholder="Default: Rachel" /></div>
     <div class="modal-actions">
@@ -273,13 +274,13 @@ body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-ser
   </div>
 </div>
 <script>
-let cfg={anthropic:'',n8nWebhook:'https://cjnf.app.n8n.cloud/webhook/e5d04b1b-b5f9-4c58-bbc4-f11f65192d4d',ttsWebhook:'https://cjnf.app.n8n.cloud/webhook/3259a034-cb48-4807-8592-9bd574262b1c',openai:'',voiceId:'21m00Tcm4TlvDq8ikWAM'};
+let cfg={anthropic:'',n8nWebhook:'https://cjnf.app.n8n.cloud/webhook/e5d04b1b-b5f9-4c58-bbc4-f11f65192d4d',ttsWebhook:'https://cjnf.app.n8n.cloud/webhook/3259a034-cb48-4807-8592-9bd574262b1c',leadWebhook:'https://cjnf.app.n8n.cloud/webhook/b3dd4116-147e-45c3-ae6d-0ebae6bb59ce',openai:'',voiceId:'21m00Tcm4TlvDq8ikWAM'};
 try{const s=localStorage.getItem('cmdCenterCfg');if(s)cfg={...cfg,...JSON.parse(s)};}catch(e){}
 function updateClock(){const n=new Date();document.getElementById('clock').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});}
 setInterval(updateClock,1000);updateClock();
-function openSettings(){document.getElementById('anthropicKey').value=cfg.anthropic;document.getElementById('n8nWebhook').value=cfg.n8nWebhook;document.getElementById('ttsWebhook').value=cfg.ttsWebhook;document.getElementById('openaiKey').value=cfg.openai;document.getElementById('voiceId').value=cfg.voiceId==='21m00Tcm4TlvDq8ikWAM'?'':cfg.voiceId;document.getElementById('modal').classList.add('open');}
+function openSettings(){document.getElementById('anthropicKey').value=cfg.anthropic;document.getElementById('n8nWebhook').value=cfg.n8nWebhook;document.getElementById('ttsWebhook').value=cfg.ttsWebhook;document.getElementById('leadWebhook').value=cfg.leadWebhook;document.getElementById('openaiKey').value=cfg.openai;document.getElementById('voiceId').value=cfg.voiceId==='21m00Tcm4TlvDq8ikWAM'?'':cfg.voiceId;document.getElementById('modal').classList.add('open');}
 function closeSettings(){document.getElementById('modal').classList.remove('open');}
-function saveSettings(){cfg.anthropic=document.getElementById('anthropicKey').value.trim();cfg.n8nWebhook=document.getElementById('n8nWebhook').value.trim();cfg.ttsWebhook=document.getElementById('ttsWebhook').value.trim();cfg.openai=document.getElementById('openaiKey').value.trim();const vid=document.getElementById('voiceId').value.trim();cfg.voiceId=vid||'21m00Tcm4TlvDq8ikWAM';try{localStorage.setItem('cmdCenterCfg',JSON.stringify(cfg));}catch(e){}closeSettings();addMessage('cmd','Command Center','Configuration saved. APIs connected.','System');}
+function saveSettings(){cfg.anthropic=document.getElementById('anthropicKey').value.trim();cfg.n8nWebhook=document.getElementById('n8nWebhook').value.trim();cfg.ttsWebhook=document.getElementById('ttsWebhook').value.trim();cfg.leadWebhook=document.getElementById('leadWebhook').value.trim();cfg.openai=document.getElementById('openaiKey').value.trim();const vid=document.getElementById('voiceId').value.trim();cfg.voiceId=vid||'21m00Tcm4TlvDq8ikWAM';try{localStorage.setItem('cmdCenterCfg',JSON.stringify(cfg));}catch(e){}closeSettings();addMessage('cmd','Command Center','Configuration saved. All webhooks connected.','System');}
 function selectAgent(el,name){document.querySelectorAll('.agent-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');addMessage('cmd','Command Center',`${name} selected. Standing by.`,'Agent');}
 function now(){return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});}
 function addMessage(type,name,content,badge=''){const msgs=document.getElementById('messages');const div=document.createElement('div');div.className='msg'+(type==='you'?' you':'');const ac=type==='you'?'avatar-you':type==='agent'?'avatar-agent':'avatar-cmd';const at=type==='you'?'YOU':type==='agent'?'AG':'CC';const bc=type==='you'?'badge-you':type==='agent'?'badge-agent':'badge-cmd';div.innerHTML=`<div class="msg-avatar ${ac}">${at}</div><div class="msg-body"><div class="msg-header"><span class="msg-name">${name}</span>${badge?`<span class="msg-badge ${bc}">${badge}</span>`:''}<span class="msg-time">${now()}</span></div><div class="msg-text">${content}</div></div>`;msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
@@ -287,24 +288,19 @@ function addTyping(){const msgs=document.getElementById('messages');const div=do
 function removeTyping(){const t=document.getElementById('typing-indicator');if(t)t.remove();}
 const SYSTEM_PROMPT=`You are the Command Center — the brain of an autonomous AI agent army. You manage 11 specialized agents across 4 squads:
 BUILD SQUAD: Architect (designs n8n workflows), Builder (generates workflow JSON), Debugger (fixes errors)
-OPS SQUAD: Lead Finder (Apollo/Clay/Hunter), Scorer (0-100 qualification), Copywriter (Claude API), CRM Agent (Google Sheets)
-OUTREACH SQUAD: Email Agent (Instantly/Smartlead), LinkedIn Agent (Phantombuster), Voice Agent (ElevenLabs), Scheduler (Cal.com)
+OPS SQUAD: Lead Finder (SerpAPI/Apollo), Scorer (0-100 qualification), Copywriter (Claude API), CRM Agent (Google Sheets)
+OUTREACH SQUAD: Email Agent (Apollo sequences), LinkedIn Agent (Phantombuster), Voice Agent (ElevenLabs/Twilio), Scheduler (Cal.com)
 SUPPORT SQUAD: Watchdog (monitors agents), Reporter (daily digests), Optimizer (A/B tests), Ad Agent (Meta/Google)
-Respond in direct military-ops style. Use [DISPATCHING: AgentName → task] format. Under 150 words. The user is Jenale. She is the General.`;
+Respond in direct military-ops style. Use [DISPATCHING: AgentName → task] format. Under 150 words. The user is Jenale. She is the General. Never use markdown code blocks or backticks.`;
 async function speak(text){
   try{
-    const res=await fetch(cfg.ttsWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:text.substring(0,500)})});
+    const res=await fetch(cfg.ttsWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:text.replace(/[^\x20-\x7E]/g,'').substring(0,500)})});
     if(!res.ok)return;
     const blob=await res.blob();
-    const audio=new Audio(URL.createObjectURL(blob));
-    audio.play();
+    new Audio(URL.createObjectURL(blob)).play();
   }catch(e){console.log('TTS error:',e);}
-}async function sendCommand(){
-  if(!window._audioUnlocked){
-    const ctx=new AudioContext();
-    ctx.resume();
-    window._audioUnlocked=true;
-  }
+}
+async function sendCommand(){
   const input=document.getElementById('cmdInput');
   const cmd=input.value.trim();
   if(!cmd)return;
@@ -316,15 +312,19 @@ async function speak(text){
 async function processCommand(cmd){
   addTyping();
   document.getElementById('sendBtn').disabled=true;
-  try{document.addEventListener('click', function unlock(){
-  const ctx = new (window.AudioContext||window.webkitAudioContext)();
-  ctx.resume();
-  window._audioUnlocked = true;
-  document.removeEventListener('click', unlock);
-}, {once: true});
+  try{
     if(!cfg.anthropic){removeTyping();addMessage('cmd','Command Center','No Anthropic API key. Click <strong>Configure</strong> to add your keys, General.','System');document.getElementById('sendBtn').disabled=false;return;}
     let reply;
-    if(cfg.n8nWebhook){
+    const isLeadSearch=/find|search|leads?|prospect/i.test(cmd);
+    if(isLeadSearch && cfg.leadWebhook){
+      const nicheParts=cmd.match(/(?:in|for)\s+([a-zA-Z]+)/i);
+      const titleParts=cmd.match(/ceo|founder|vp|head|cmo|coo/i);
+      const niche=nicheParts?nicheParts[1]:'SaaS';
+      const title=titleParts?titleParts[0].toUpperCase():'CEO';
+      const res=await fetch(cfg.leadWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({niche:niche,title:title})});
+      if(!res.ok)throw new Error('Lead finder failed');
+      reply=`[DISPATCHING: Lead Finder → Searchin ${niche} ${title} leads now]<br>Leads are bein logged to your Google Sheets CRM. Check the sheet for results, General.`;
+    }else if(cfg.n8nWebhook){
       const res=await fetch(cfg.n8nWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd,anthropic_key:cfg.anthropic})});
       if(!res.ok)throw new Error('n8n webhook failed');
       const text=await res.text();
@@ -337,22 +337,22 @@ async function processCommand(cmd){
     }
     removeTyping();
     addMessage('cmd','Command Center',reply.replace(/\n/g,'<br>').replace(/\[([^\]]+)\]/g,'<span style="color:var(--accent);font-family:\'JetBrains Mono\',monospace;font-size:0.8rem;">[$1]</span>'),'Dispatch');
-  if(cfg.ttsWebhook){speak(reply.replace(/<[^>]*>/g,'').replace(/[\n\r\t\*\[\]→]/g,' ').trim());}
+    if(cfg.ttsWebhook){speak(reply.replace(/<[^>]*>/g,'').replace(/[\n\r\t\*\[\]]/g,' ').trim());}
     addActivity(`Command: "${cmd.substring(0,40)}${cmd.length>40?'...':''}"`)
   }catch(err){removeTyping();addMessage('cmd','Command Center',`Connection error: ${err.message}`,'Error');}
   document.getElementById('sendBtn').disabled=false;
 }
 function addActivity(text){const p=document.querySelector('.right-panel .panel-section:nth-child(3)');const f=p?.querySelector('.activity-item');if(!f)return;const d=document.createElement('div');d.className='activity-item';d.innerHTML=`<span class="activity-time">${now()}</span><span class="activity-text">${text}</span>`;f.parentNode.insertBefore(d,f);}
-
 function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendCommand();}}
 function setCmd(text){const i=document.getElementById('cmdInput');i.value=text;i.focus();}
 function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
-function quickBuild(type){const cmds={email:'Build an email sequence agent using Instantly',linkedin:'Build a LinkedIn automation agent using Phantombuster',calling:'Build an ElevenLabs calling agent for HOT leads',reporting:'Build a daily reporter agent that sends summaries at 7am'};setCmd(cmds[type]);document.getElementById('cmdInput').focus();}
+function quickBuild(type){const cmds={email:'Build an email sequence agent using Apollo',linkedin:'Build a LinkedIn automation agent using Phantombuster',calling:'Build an ElevenLabs calling agent for HOT leads',reporting:'Build a daily reporter agent that sends summaries at 7am'};setCmd(cmds[type]);document.getElementById('cmdInput').focus();}
 let mediaRecorder,audioChunks=[],isRecording=false,stream;
 async function toggleVoice(){if(isRecording){stopVoice();return;}try{stream=await navigator.mediaDevices.getUserMedia({audio:true});mediaRecorder=new MediaRecorder(stream);audioChunks=[];mediaRecorder.ondataavailable=e=>audioChunks.push(e.data);mediaRecorder.onstop=handleVoiceEnd;mediaRecorder.start();isRecording=true;document.getElementById('micBtn').classList.add('recording');document.getElementById('voiceTopBtn').classList.add('recording');addMessage('cmd','Command Center','Listening... click mic again to send.','Voice');}catch(err){addMessage('cmd','Command Center','Mic access denied.','Error');}}
 function stopVoice(){if(!isRecording)return;isRecording=false;document.getElementById('micBtn').classList.remove('recording');document.getElementById('voiceTopBtn').classList.remove('recording');if(mediaRecorder&&mediaRecorder.state!=='inactive')mediaRecorder.stop();if(stream)stream.getTracks().forEach(t=>t.stop());}
 async function handleVoiceEnd(){if(!cfg.openai){addMessage('cmd','Command Center','No OpenAI key for transcription.','Error');return;}addTyping();try{const blob=new Blob(audioChunks,{type:'audio/webm'});const form=new FormData();form.append('file',blob,'audio.webm');form.append('model','whisper-1');const res=await fetch('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{'Authorization':`Bearer ${cfg.openai}`},body:form});const data=await res.json();removeTyping();if(data.text){document.getElementById('cmdInput').value=data.text;await sendCommand();}}catch(err){removeTyping();addMessage('cmd','Command Center','Transcription failed: '+err.message,'Error');}}
-document.addEventListener('click',function unlock(){new(window.AudioContext||window.webkitAudioContext)().resume();document.removeEventListener('click',unlock);},{once:true});if(!cfg.anthropic)setTimeout(openSettings,600);
+document.addEventListener('click',function unlock(){new(window.AudioContext||window.webkitAudioContext)().resume();document.removeEventListener('click',unlock);},{once:true});
+if(!cfg.anthropic)setTimeout(openSettings,600);
 </script>
 </body>
 </html>
