@@ -3,683 +3,399 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Elevated Automations — AI Agent Army</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400&family=JetBrains+Mono:wght@300;400;500&family=Cormorant+Garamond:ital,wght@1,300&display=swap" rel="stylesheet">
+<title>Elevated Automations — Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Raleway:wght@200;300;400&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-:root{
-  --bg:#060606;
-  --surface:#0d0d0d;
-  --surface2:#141414;
-  --y:#FFD600;
-  --y2:rgba(255,214,0,0.08);
-  --text:#F5F0E8;
-  --muted:rgba(245,240,232,0.45);
-  --muted2:rgba(245,240,232,0.2);
-  --border:rgba(255,214,0,0.1);
-  --border2:rgba(255,214,0,0.25);
-}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:'Raleway',sans-serif;font-weight:300;overflow-x:hidden;cursor:none;}
-body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,214,0,0.012) 2px,rgba(255,214,0,0.012) 4px);pointer-events:none;z-index:9997;}
-
-/* CURSOR */
-.cursor{position:fixed;width:6px;height:6px;background:var(--y);border-radius:50%;pointer-events:none;z-index:9999;box-shadow:0 0 10px var(--y);}
-.cursor-ring{position:fixed;width:28px;height:28px;border:1px solid rgba(255,214,0,0.5);border-radius:50%;pointer-events:none;z-index:9998;transition:all 0.12s ease;}
-
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 48px;display:flex;align-items:center;justify-content:space-between;}
-nav::before{content:'';position:absolute;inset:0;background:rgba(6,6,6,0.9);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
-.nav-brand{position:relative;z-index:1;display:flex;align-items:center;gap:10px;}
-.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--y);box-shadow:0 0 8px var(--y);animation:blink 2s infinite;}
+:root{--bg:#070809;--surface:#0d0f10;--surface2:#131618;--surface3:#1a1d20;--accent:#00f5d4;--accent2:#00c4aa;--yellow:#FFD600;--red:#ff3355;--text:#e8eaed;--muted:rgba(232,234,237,0.45);--muted2:rgba(232,234,237,0.2);--border:rgba(0,245,212,0.08);--border2:rgba(0,245,212,0.2);}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,245,212,0.008) 2px,rgba(0,245,212,0.008) 4px);pointer-events:none;z-index:9999;}
+.shell{display:grid;grid-template-columns:220px 1fr 240px;grid-template-rows:48px 1fr 60px;height:100vh;}
+.topbar{grid-column:1/-1;display:flex;align-items:center;background:var(--surface);border-bottom:1px solid var(--border);padding:0 16px;justify-content:space-between;}
+.tb-left{display:flex;align-items:center;gap:12px;}
+.tb-logo{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:8px;}
+.tb-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:blink 2s infinite;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
-.nav-wordmark{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:400;letter-spacing:3px;color:var(--text);text-transform:uppercase;}
-.nav-links{position:relative;z-index:1;display:flex;align-items:center;gap:36px;}
-.nav-links a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.3s;}
-.nav-links a:hover{color:var(--y);}
-.nav-cta{color:var(--y);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:10px 22px;border:1px solid var(--border2);cursor:none;text-decoration:none;transition:all 0.2s;background:rgba(255,214,0,0.04);}
-.nav-cta:hover{background:rgba(255,214,0,0.1);box-shadow:0 0 20px rgba(255,214,0,0.15);}
-.nav-ham{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:4px;position:relative;z-index:2;cursor:pointer;}
-.nav-ham span{display:block;width:22px;height:1px;background:var(--y);transition:all 0.3s;}
-
-/* HERO */
-#home{min-height:100vh;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:120px 48px 80px;position:relative;overflow:hidden;}
-.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,214,0,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,214,0,0.035) 1px,transparent 1px);background-size:52px 52px;}
-.hero-radial{position:absolute;inset:0;background:radial-gradient(ellipse at 65% 50%,rgba(255,214,0,0.07) 0%,transparent 55%),radial-gradient(ellipse at 15% 80%,rgba(255,214,0,0.04) 0%,transparent 40%);}
-.hero-corner-ring{position:absolute;top:50%;right:40px;transform:translateY(-50%);width:460px;height:460px;border:1px solid rgba(255,214,0,0.07);border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;}
-.hero-corner-ring::before{content:'';position:absolute;width:340px;height:340px;border:1px solid rgba(255,214,0,0.05);border-radius:50%;}
-.hero-corner-ring::after{content:'';position:absolute;width:220px;height:220px;border:1px solid rgba(255,214,0,0.08);border-radius:50%;animation:spin 18s linear infinite;}
-@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-.ring-center{width:72px;height:72px;border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--y);text-align:center;background:rgba(255,214,0,0.04);}
-.hero-hud{position:absolute;right:520px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:20px;}
-.hud-row{display:flex;flex-direction:column;gap:5px;text-align:right;}
-.hud-val{font-family:'JetBrains Mono',monospace;font-size:28px;color:var(--y);line-height:1;}
-.hud-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted2);}
-.hud-bar{width:100px;height:1px;background:rgba(255,214,0,0.1);margin-left:auto;margin-top:5px;overflow:hidden;}
-.hud-fill{height:100%;background:var(--y);animation:barFill 1.5s ease-out forwards;width:0;}
-@keyframes barFill{to{width:var(--w,80%);}}
-.hero-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--y);margin-bottom:24px;opacity:0;animation:fadeUp 0.6s 0.3s forwards;display:flex;align-items:center;gap:12px;}
-.hero-tag::before{content:'';width:28px;height:1px;background:var(--y);}
-.hero-title{margin-bottom:44px;opacity:0;animation:fadeUp 0.7s 0.6s forwards;}
-.hero-desc{font-size:15px;line-height:1.9;color:var(--muted);max-width:500px;margin-bottom:48px;opacity:0;animation:fadeUp 0.7s 1s forwards;}
-.hero-btns{display:flex;gap:16px;opacity:0;animation:fadeUp 0.7s 1.2s forwards;}
-.btn-y{background:var(--y);color:var(--bg);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:14px 32px;border:none;cursor:none;text-decoration:none;display:inline-block;transition:box-shadow 0.2s;}
-.btn-y:hover{box-shadow:0 0 28px rgba(255,214,0,0.4);}
-.btn-ghost{background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:14px 32px;border:1px solid rgba(245,240,232,0.12);cursor:none;text-decoration:none;display:inline-block;transition:all 0.2s;}
-.btn-ghost:hover{border-color:var(--y);color:var(--y);}
-.status-strip{position:absolute;bottom:0;left:0;right:0;padding:12px 48px;border-top:1px solid var(--border);background:rgba(6,6,6,0.7);backdrop-filter:blur(10px);display:flex;align-items:center;gap:28px;overflow:hidden;}
-.s-item{display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);white-space:nowrap;}
-.s-dot{width:4px;height:4px;border-radius:50%;background:var(--y);box-shadow:0 0 5px var(--y);}
-.s-dot.dim{background:rgba(255,214,0,0.3);box-shadow:none;}
-.s-ticker{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(245,240,232,0.15);}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-
-/* SECTION */
-.section{padding:120px 48px;}
-.sec-eyebrow{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:5px;text-transform:uppercase;color:var(--y);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
-.sec-eyebrow::before{content:'';width:20px;height:1px;background:var(--y);}
-.sec-title{font-family:'Raleway',sans-serif;font-weight:100;font-size:50px;letter-spacing:1px;color:var(--text);line-height:1.1;margin-bottom:64px;}
-.sec-title em{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;color:var(--y);}
-
-/* SERVICES */
-#services{background:var(--surface);}
-.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
-.svc-card{background:var(--surface);padding:40px 32px;position:relative;overflow:hidden;transition:background 0.3s;}
-.svc-card::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--y),transparent);transform:scaleX(0);transition:transform 0.4s;}
-.svc-card:hover{background:var(--surface2);}
-.svc-card:hover::after{transform:scaleX(1);}
-.svc-num{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,214,0,0.35);letter-spacing:2px;margin-bottom:24px;}
-.svc-icon{width:40px;height:40px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--y);font-size:16px;margin-bottom:18px;transition:border-color 0.3s,box-shadow 0.3s;}
-.svc-card:hover .svc-icon{border-color:var(--y);box-shadow:0 0 14px rgba(255,214,0,0.12);}
-.svc-name{font-family:'Raleway',sans-serif;font-weight:300;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--text);margin-bottom:12px;}
-.svc-desc{font-size:12px;line-height:1.9;color:var(--muted);}
-.svc-tag{margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,214,0,0.45);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.svc-tag span::before{content:'▸ ';color:var(--y);}
-
-/* PROCESS */
-#process{background:var(--bg);}
-.proc-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
-.proc-steps{display:flex;flex-direction:column;}
-.pstep{display:flex;gap:20px;padding:28px 0;border-bottom:1px solid var(--border);}
-.pstep:last-child{border-bottom:none;}
-.pstep-n{font-family:'JetBrains Mono',monospace;font-size:26px;color:rgba(255,214,0,0.12);line-height:1;flex-shrink:0;width:44px;transition:color 0.3s;}
-.pstep:hover .pstep-n{color:var(--y);}
-.pstep-name{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--y);margin-bottom:7px;}
-.pstep-desc{font-size:12px;line-height:1.8;color:var(--muted);}
-.terminal{background:var(--surface);border:1px solid var(--border);}
-.term-bar{padding:11px 14px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px;}
-.tdot{width:7px;height:7px;border-radius:50%;}
-.td1{background:#ff3355;}.td2{background:#ffaa00;}.td3{background:var(--y);}
-.term-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted2);margin-left:6px;}
-.term-body{padding:20px;display:flex;flex-direction:column;gap:8px;}
-.tl{font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;color:var(--muted);}
-.tl .pr{color:var(--y);}
-.tl .cmd{color:var(--text);}
-.tl .ok{color:#00ff88;}
-.tl .dim{color:rgba(245,240,232,0.2);}
-.tl .hi{color:#a78bfa;}
-.cblink{display:inline-block;width:7px;height:12px;background:var(--y);animation:cb 1s infinite;vertical-align:middle;}
-@keyframes cb{0%,100%{opacity:1;}50%{opacity:0;}}
-
-/* PRICING */
-#pricing{background:var(--surface);}
-.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
-.price-card{background:var(--surface);padding:44px 32px;position:relative;}
-.price-card.feat{background:linear-gradient(135deg,rgba(255,214,0,0.05),rgba(255,214,0,0.02));}
-.price-card.feat::before{content:'';position:absolute;inset:0;border:1px solid var(--border2);pointer-events:none;}
-.plan-badge{position:absolute;top:18px;right:18px;background:rgba(255,214,0,0.08);color:var(--y);font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:3px;text-transform:uppercase;padding:4px 10px;border:1px solid var(--border);}
-.plan-tier{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:5px;text-transform:uppercase;color:var(--muted2);margin-bottom:24px;}
-.plan-p{font-family:'Raleway',sans-serif;font-weight:100;font-size:60px;color:var(--text);line-height:1;letter-spacing:-2px;}
-.plan-p sup{font-size:24px;color:var(--muted2);font-weight:300;vertical-align:top;margin-top:8px;display:inline-block;}
-.plan-mo{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;color:var(--muted2);margin-bottom:28px;}
-.plan-div{height:1px;background:var(--border);margin-bottom:24px;}
-.plan-feats{display:flex;flex-direction:column;gap:11px;margin-bottom:36px;}
-.plan-feat{display:flex;align-items:flex-start;gap:9px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted);line-height:1.5;}
-.pf-check{color:var(--y);flex-shrink:0;}
-.plan-btn{width:100%;padding:12px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:4px;text-transform:uppercase;cursor:none;transition:all 0.2s;border:1px solid var(--border2);background:transparent;color:var(--y);text-decoration:none;display:block;text-align:center;}
-.plan-btn:hover{background:rgba(255,214,0,0.06);box-shadow:0 0 16px rgba(255,214,0,0.1);}
-.price-card.feat .plan-btn{background:var(--y);color:var(--bg);border-color:var(--y);}
-.price-card.feat .plan-btn:hover{box-shadow:0 0 28px rgba(255,214,0,0.35);}
-
-/* SIGNUP */
-#signup{background:var(--bg);position:relative;overflow:hidden;}
-#signup::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 75% 50%,rgba(255,214,0,0.04) 0%,transparent 55%);}
-.su-layout{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center;position:relative;z-index:1;}
-.su-feats{display:flex;flex-direction:column;gap:14px;margin-top:36px;}
-.su-feat{display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
-.su-dot{width:4px;height:4px;border-radius:50%;background:var(--y);box-shadow:0 0 5px var(--y);flex-shrink:0;}
-.su-form{background:var(--surface);border:1px solid var(--border);padding:36px;}
-.form-hd{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--y);margin-bottom:24px;display:flex;align-items:center;gap:6px;}
-.form-hd::before{content:'>';}
-.form-fs{display:flex;flex-direction:column;gap:14px;}
-.form-f{display:flex;flex-direction:column;gap:5px;}
-.form-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted2);}
-.form-inp{background:var(--surface2);border:1px solid rgba(245,240,232,0.07);padding:11px 13px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;transition:border-color 0.2s;width:100%;}
-.form-inp:focus{border-color:var(--border2);}
-.form-inp::placeholder{color:var(--muted2);}
-.form-sel{background:var(--surface2);border:1px solid rgba(245,240,232,0.07);padding:11px 13px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;appearance:none;width:100%;}
-.form-sel option{background:var(--surface);}
-.form-sub{width:100%;background:var(--y);color:var(--bg);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;padding:13px;border:none;cursor:pointer;margin-top:6px;transition:box-shadow 0.2s;}
-.form-sub:hover{box-shadow:0 0 24px rgba(255,214,0,0.4);}
-
-/* FOOTER */
-footer{padding:36px 48px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface);}
-.ft-brand{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--muted2);display:flex;align-items:center;gap:8px;}
-.ft-links{display:flex;gap:24px;}
-.ft-links a{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted2);text-decoration:none;transition:color 0.2s;}
-.ft-links a:hover{color:var(--y);}
-.ft-copy{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;color:rgba(245,240,232,0.12);}
-
-/* REVEAL */
-.reveal{opacity:0;transform:translateY(18px);transition:opacity 0.7s ease,transform 0.7s ease;}
-.reveal.visible{opacity:1;transform:translateY(0);}
-
-/* ══════════════════════════════════════
-   MOBILE RESPONSIVE
-══════════════════════════════════════ */
-@media(max-width:768px){
-
-  /* Cursor off on touch */
-  .cursor,.cursor-ring{display:none;}
-  body{cursor:auto;}
-  a,button{cursor:pointer;}
-  .btn-y,.btn-ghost,.nav-cta,.plan-btn,.form-sub{cursor:pointer;}
-
-  /* NAV */
-  nav{padding:14px 20px;}
-  .nav-ham{display:flex;}
-  .nav-links{
-    display:none;
-    flex-direction:column;
-    gap:0;
-    position:absolute;
-    top:100%;left:0;right:0;
-    background:rgba(6,6,6,0.97);
-    backdrop-filter:blur(24px);
-    border-bottom:1px solid var(--border);
-    padding:8px 0 16px;
-    z-index:1;
-  }
-  .nav-links.open{display:flex;}
-  .nav-links a{
-    padding:14px 24px;
-    font-size:10px;
-    border-bottom:1px solid var(--border);
-    color:var(--muted);
-  }
-  .nav-cta{
-    margin:12px 20px 0;
-    text-align:center;
-    padding:12px;
-    font-size:9px;
-  }
-
-  /* HERO */
-  #home{padding:90px 20px 90px;min-height:100vh;justify-content:flex-start;padding-top:100px;}
-  .hero-corner-ring{display:none;}
-  .hero-hud{
-    position:relative;
-    right:auto;top:auto;
-    transform:none;
-    flex-direction:row;
-    justify-content:space-between;
-    width:100%;
-    margin-bottom:28px;
-    padding:14px 16px;
-    background:rgba(255,214,0,0.03);
-    border:1px solid var(--border);
-    order:-1;
-    gap:0;
-  }
-  .hud-row{text-align:center;flex:1;}
-  .hud-val{font-size:18px;}
-  .hud-lbl{font-size:7px;letter-spacing:1px;}
-  .hud-bar{width:40px;margin:4px auto 0;}
-  .hero-tag{font-size:7px;letter-spacing:2px;margin-bottom:16px;}
-  .hero-title{margin-bottom:28px;}
-  .hero-title svg{width:100%;height:auto;max-width:320px;}
-  .hero-desc{font-size:13px;line-height:1.8;max-width:100%;margin-bottom:32px;}
-  .hero-btns{flex-direction:column;gap:10px;width:100%;}
-  .btn-y,.btn-ghost{text-align:center;padding:14px 20px;font-size:9px;width:100%;}
-  .status-strip{padding:10px 16px;gap:10px;flex-wrap:wrap;position:relative;}
-  .s-item{font-size:7px;letter-spacing:1px;}
-  .s-ticker{display:none;}
-
-  /* SECTIONS */
-  .section{padding:64px 20px;}
-  .sec-title{font-size:32px;margin-bottom:36px;line-height:1.15;}
-
-  /* SERVICES */
-  .svc-grid{grid-template-columns:1fr;}
-  .svc-card{padding:28px 20px;}
-  .svc-name{font-size:12px;}
-
-  /* PROCESS */
-  .proc-layout{grid-template-columns:1fr;gap:40px;}
-  .terminal{display:none;}
-  .pstep{gap:14px;padding:20px 0;}
-  .pstep-n{font-size:20px;width:36px;}
-
-  /* PRICING */
-  .price-grid{grid-template-columns:1fr;}
-  .price-card{padding:32px 20px;}
-  .plan-p{font-size:48px;}
-  .plan-badge{font-size:6px;padding:3px 8px;}
-
-  /* SIGNUP */
-  #signup{padding:64px 20px;}
-  .su-layout{
-    display:flex !important;
-    flex-direction:column !important;
-    gap:36px;
-    width:100%;
-  }
-  .su-layout > *{width:100% !important;max-width:100% !important;}
-  .su-form{padding:24px 18px;width:100%;box-sizing:border-box;}
-  .su-feats{gap:10px;}
-  .sec-title{font-size:32px !important;}
-  .form-inp,.form-sel{width:100%;font-size:14px;}
-  .form-sub{font-size:10px;letter-spacing:2px;}
-
-  /* FOOTER */
-  footer{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:18px;
-    padding:28px 20px;
-  }
-  .ft-links{flex-wrap:wrap;gap:14px;}
-}
-
-@media(max-width:400px){
-  .hero-hud{flex-direction:column;gap:12px;}
-  .hud-row{text-align:left;flex:none;}
-  .hud-bar{margin:4px 0 0;}
-  .sec-title{font-size:28px;}
-}
+.tb-divider{width:1px;height:20px;background:var(--border);}
+.tb-status{font-size:9px;letter-spacing:2px;color:var(--muted2);display:flex;align-items:center;gap:6px;}
+.tb-status-dot{width:4px;height:4px;border-radius:50%;background:#00ff88;box-shadow:0 0 6px #00ff88;}
+.tb-right{display:flex;align-items:center;gap:12px;}
+.tb-clock{font-size:11px;color:var(--muted2);letter-spacing:2px;}
+.tb-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;}
+.tb-btn:hover{border-color:var(--border2);color:var(--accent);}
+.tb-btn.recording{border-color:var(--red);color:var(--red);}
+.left-panel{background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;}
+.panel-section{padding:14px 12px;border-bottom:1px solid var(--border);}
+.panel-label{font-size:7px;letter-spacing:4px;text-transform:uppercase;color:var(--muted2);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.panel-label::before{content:'';width:12px;height:1px;background:var(--accent);}
+.agent-item{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:2px;cursor:pointer;transition:background 0.2s;margin-bottom:2px;}
+.agent-item:hover{background:var(--surface2);}
+.agent-item.active{background:rgba(0,245,212,0.06);border-left:2px solid var(--accent);}
+.agent-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.agent-dot.online{background:var(--accent);box-shadow:0 0 5px var(--accent);}
+.agent-dot.idle{background:rgba(232,234,237,0.2);}
+.agent-dot.building{background:var(--yellow);box-shadow:0 0 5px var(--yellow);}
+.agent-name{font-size:9px;letter-spacing:1px;color:var(--muted);flex:1;}
+.agent-item.active .agent-name{color:var(--accent);}
+.agent-squad{font-size:7px;color:var(--muted2);letter-spacing:1px;}
+.mission-chips{display:flex;flex-direction:column;gap:5px;}
+.mission-chip{display:flex;align-items:center;gap:7px;font-size:8px;letter-spacing:1px;color:var(--muted2);padding:5px 0;}
+.chip-dot{width:5px;height:5px;border-radius:50%;}
+.chip-dot.running{background:var(--accent);box-shadow:0 0 5px var(--accent);animation:blink 1.5s infinite;}
+.chip-dot.done{background:#00ff88;}
+.chip-dot.idle{background:rgba(232,234,237,0.15);}
+.main{background:var(--bg);display:flex;flex-direction:column;overflow:hidden;}
+.messages{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth;}
+.messages::-webkit-scrollbar{width:3px;}
+.messages::-webkit-scrollbar-thumb{background:var(--border2);}
+.msg{display:flex;gap:10px;animation:fadeIn 0.3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.msg.you{flex-direction:row-reverse;}
+.msg-avatar{width:30px;height:30px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:500;letter-spacing:1px;flex-shrink:0;}
+.avatar-cmd{background:rgba(0,245,212,0.1);border:1px solid var(--border2);color:var(--accent);}
+.avatar-you{background:rgba(255,214,0,0.1);border:1px solid rgba(255,214,0,0.25);color:var(--yellow);}
+.avatar-agent{background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.25);color:#a78bfa;}
+.msg-body{max-width:68%;}
+.msg.you .msg-body{align-items:flex-end;display:flex;flex-direction:column;}
+.msg-header{display:flex;align-items:center;gap:7px;margin-bottom:5px;flex-wrap:wrap;}
+.msg-name{font-size:9px;letter-spacing:2px;color:var(--muted2);text-transform:uppercase;}
+.msg-badge{font-size:7px;letter-spacing:2px;text-transform:uppercase;padding:2px 7px;border-radius:1px;}
+.badge-cmd{background:rgba(0,245,212,0.08);color:var(--accent);border:1px solid rgba(0,245,212,0.15);}
+.badge-you{background:rgba(255,214,0,0.08);color:var(--yellow);border:1px solid rgba(255,214,0,0.2);}
+.badge-agent{background:rgba(167,139,250,0.08);color:#a78bfa;border:1px solid rgba(167,139,250,0.2);}
+.msg-time{font-size:8px;color:var(--muted2);margin-left:auto;}
+.msg-text{font-size:12px;line-height:1.75;color:var(--text);background:var(--surface);border:1px solid var(--border);padding:10px 14px;border-radius:2px;}
+.msg.you .msg-text{background:rgba(255,214,0,0.04);border-color:rgba(255,214,0,0.1);}
+.typing span{display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--accent);margin:0 2px;animation:bounce 1.2s infinite;}
+.typing span:nth-child(2){animation-delay:0.2s;}
+.typing span:nth-child(3){animation-delay:0.4s;}
+@keyframes bounce{0%,80%,100%{transform:translateY(0);}40%{transform:translateY(-6px);}}
+.input-area{border-top:1px solid var(--border);background:var(--surface);padding:12px 16px;}
+.quick-cmds{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
+.quick-cmd{font-size:8px;letter-spacing:1px;color:var(--muted2);border:1px solid var(--border);padding:4px 10px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.quick-cmd:hover{border-color:var(--border2);color:var(--accent);}
+.input-row{display:flex;gap:8px;align-items:flex-end;}
+.cmd-input{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:12px;padding:10px 12px;resize:none;outline:none;transition:border-color 0.2s;min-height:40px;max-height:120px;line-height:1.5;}
+.cmd-input:focus{border-color:var(--border2);}
+.cmd-input::placeholder{color:var(--muted2);}
+.send-btn{background:var(--accent);color:var(--bg);border:none;padding:10px 18px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;align-self:flex-end;white-space:nowrap;}
+.send-btn:hover{box-shadow:0 0 16px rgba(0,245,212,0.3);}
+.send-btn:disabled{opacity:0.4;cursor:default;}
+.mic-btn{background:transparent;border:1px solid var(--border);color:var(--muted2);padding:10px 14px;cursor:pointer;font-size:14px;transition:all 0.2s;align-self:flex-end;}
+.mic-btn:hover{border-color:var(--border2);color:var(--accent);}
+.mic-btn.recording{border-color:var(--red);color:var(--red);}
+.right-panel{background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;}
+.panel-title{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted2);display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.pipeline-item{margin-bottom:12px;}
+.pipeline-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.pipeline-name{font-size:9px;letter-spacing:1px;color:var(--text);}
+.pipeline-badge{font-size:7px;letter-spacing:1px;padding:2px 6px;}
+.pb-live{background:rgba(0,255,136,0.08);color:#00ff88;border:1px solid rgba(0,255,136,0.2);}
+.pb-building{background:rgba(255,214,0,0.08);color:var(--yellow);border:1px solid rgba(255,214,0,0.2);}
+.pipeline-meta{font-size:8px;color:var(--muted2);margin-bottom:5px;}
+.progress-bar{height:2px;background:var(--surface3);border-radius:1px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:1px;}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.stat-card{background:var(--surface2);border:1px solid var(--border);padding:10px 8px;text-align:center;}
+.stat-val{font-size:20px;color:var(--accent);line-height:1;margin-bottom:3px;}
+.stat-lbl{font-size:7px;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);}
+.activity-item{display:flex;flex-direction:column;gap:2px;padding:6px 0;border-bottom:1px solid var(--border);}
+.activity-time{font-size:8px;color:var(--muted2);}
+.activity-text{font-size:9px;color:var(--muted);}
+.sidebar-divider{height:1px;background:var(--border);margin:4px 0;}
+.build-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.build-btn{background:var(--surface2);border:1px solid var(--border);color:var(--muted2);padding:8px 6px;font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;text-align:center;}
+.build-btn:hover{border-color:var(--border2);color:var(--accent);}
+.bottom-bar{grid-column:1/-1;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;gap:20px;padding:0 16px;font-size:8px;letter-spacing:2px;color:var(--muted2);}
+.bb-item{display:flex;align-items:center;gap:6px;}
+.bb-dot{width:4px;height:4px;border-radius:50%;}
+.bb-dot.active{background:var(--accent);box-shadow:0 0 4px var(--accent);}
+.bb-dot.dim{background:rgba(232,234,237,0.2);}
+.modal{position:fixed;inset:0;background:rgba(7,8,9,0.85);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;}
+.modal.open{display:flex;}
+.modal-card{background:var(--surface);border:1px solid var(--border2);padding:32px;width:460px;max-width:90vw;max-height:90vh;overflow-y:auto;}
+.modal-title{font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+.modal-sub{font-size:10px;color:var(--muted2);line-height:1.6;margin-bottom:24px;}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--muted2);margin-bottom:6px;}
+.field input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;padding:9px 11px;outline:none;transition:border-color 0.2s;}
+.field input:focus{border-color:var(--border2);}
+.modal-actions{display:flex;gap:10px;margin-top:20px;}
+.modal-btn{flex:1;padding:10px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all 0.2s;}
+.modal-btn:hover{border-color:var(--border2);color:var(--accent);}
+.modal-btn.primary{background:var(--accent);color:var(--bg);border-color:var(--accent);}
+@media(max-width:768px){.shell{grid-template-columns:1fr;grid-template-rows:52px 1fr auto 44px;height:100dvh;}.left-panel,.right-panel{display:none;}.topbar{padding:0 12px;flex-wrap:nowrap;overflow:hidden;}.tb-logo{font-size:9px;letter-spacing:2px;}.tb-divider,.tb-status{display:none;}.tb-clock{font-size:10px;letter-spacing:1px;}.tb-btn{font-size:7px;padding:4px 8px;letter-spacing:1px;}.tb-right{gap:6px;}.main{display:flex;flex-direction:column;height:100%;}.messages{flex:1;padding:14px 14px;min-height:0;}.input-area{padding:8px 12px;flex-shrink:0;}.quick-cmds{gap:5px;margin-bottom:8px;overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;}.quick-cmd{font-size:8px;padding:5px 10px;flex-shrink:0;border-radius:4px;}.cmd-input{font-size:13px;padding:10px 12px;min-height:44px;}.send-btn{font-size:9px;padding:10px 14px;min-height:44px;}.mic-btn{padding:10px 12px;min-height:44px;font-size:16px;}.msg-text{font-size:12px;line-height:1.7;}.msg-body{max-width:85%;}.bottom-bar{font-size:7px;gap:8px;overflow-x:auto;padding:0 12px;white-space:nowrap;}}
 </style>
 </head>
 <body>
+<div class="shell">
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-
-<!-- NAV -->
-<nav>
-  <div class="nav-brand">
-    <div class="nav-dot"></div>
-    <div class="nav-wordmark">Elevated Automations</div>
-  </div>
-  <div class="nav-links" id="navLinks">
-    <a href="#services">Services</a>
-    <a href="#process">Process</a>
-    <a href="#pricing">Pricing</a>
-    <a href="https://calendly.com/elevauto/free-strategy-call" target="_blank" class="nav-cta">[ Deploy Army ]</a>
-  </div>
-  <button class="nav-ham" id="navHam" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<!-- HERO -->
-<section id="home">
-  <div class="hero-grid-bg"></div>
-  <div class="hero-radial"></div>
-  <div class="hero-corner-ring">
-    <div class="ring-center">ARMY<br>ONLINE</div>
-  </div>
-
-  <div class="hero-hud">
-    <div class="hud-row">
-      <div class="hud-val">100+</div>
-      <div class="hud-lbl">Leads / month</div>
-      <div class="hud-bar"><div class="hud-fill" style="--w:85%"></div></div>
+  <div class="topbar">
+    <div class="tb-left">
+      <div class="tb-logo"><div class="tb-dot"></div>Elevated Automations</div>
+      <div class="tb-divider"></div>
+      <div class="tb-status"><div class="tb-status-dot"></div>Command Center · All 11 Agents Standing By</div>
     </div>
-    <div class="hud-row">
-      <div class="hud-val">97%</div>
-      <div class="hud-lbl">Deliverability</div>
-      <div class="hud-bar"><div class="hud-fill" style="--w:97%"></div></div>
-    </div>
-    <div class="hud-row">
-      <div class="hud-val">24/7</div>
-      <div class="hud-lbl">Army active</div>
-      <div class="hud-bar"><div class="hud-fill" style="--w:100%"></div></div>
+    <div class="tb-right">
+      <div class="tb-clock" id="clock">00:00:00</div>
+      <button class="tb-btn" id="voiceTopBtn" onclick="toggleVoice()">🎙 Voice</button>
+      <button class="tb-btn" onclick="openSettings()">Configure</button>
     </div>
   </div>
 
-  <div class="hero-tag">AI Agent Army · All Systems Operational</div>
-
-  <div class="hero-title">
-    <svg width="620" height="112" viewBox="0 0 620 112" style="max-width:100%;height:auto;">
-      <defs>
-        <filter id="gl">
-          <feOffset in="SourceGraphic" dx="-1.2" dy="0.7" result="r"/>
-          <feFlood flood-color="rgba(255,214,0,0.32)" result="rc"/>
-          <feComposite in="rc" in2="r" operator="in" result="cy"/>
-          <feOffset in="SourceGraphic" dx="1.2" dy="-0.7" result="b"/>
-          <feFlood flood-color="rgba(180,80,0,0.22)" result="bc"/>
-          <feComposite in="bc" in2="b" operator="in" result="or"/>
-          <feMerge><feMergeNode in="cy"/><feMergeNode in="or"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <linearGradient id="autoG" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="rgba(245,240,232,0.45)"/>
-          <stop offset="35%" stop-color="rgba(245,240,232,0.85)"/>
-          <stop offset="50%" stop-color="#ffffff"/>
-          <stop offset="65%" stop-color="rgba(245,240,232,0.85)"/>
-          <stop offset="100%" stop-color="rgba(245,240,232,0.45)"/>
-        </linearGradient>
-      </defs>
-      <g filter="url(#gl)" fill="#F5F0E8">
-        <rect x="2" y="6" width="24" height="2.2"/>
-        <rect x="7" y="24" width="17" height="2.2"/>
-        <rect x="2" y="42" width="24" height="2.2"/>
-        <text x="34" y="48" font-family="Raleway,sans-serif" font-weight="100" font-size="52" letter-spacing="9">LEVATED</text>
-      </g>
-      <g filter="url(#gl)">
-        <line x1="1" y1="100" x2="17" y2="65" stroke="#F5F0E8" stroke-width="1.8"/>
-        <line x1="17" y1="65" x2="33" y2="100" stroke="#F5F0E8" stroke-width="1.8"/>
-        <text x="33" y="100" font-family="Raleway,sans-serif" font-weight="100" font-size="42" letter-spacing="7" fill="url(#autoG)">UTOMATIONS</text>
-      </g>
-    </svg>
+  <div class="left-panel">
+    <div class="panel-section">
+      <div class="panel-label">Agent Network</div>
+      <div class="agent-item active" onclick="selectAgent(this,'Architect')"><div class="agent-dot online"></div><div><div class="agent-name">Architect</div><div class="agent-squad">Build Squad</div></div></div>
+      <div class="agent-item" onclick="selectAgent(this,'Builder')"><div class="agent-dot online"></div><div><div class="agent-name">Builder</div><div class="agent-squad">Build Squad</div></div></div>
+      <div class="agent-item" onclick="selectAgent(this,'Debugger')"><div class="agent-dot idle"></div><div><div class="agent-name">Debugger</div><div class="agent-squad">Build Squad</div></div></div>
+      <div class="agent-item" onclick="selectAgent(this,'Lead Finder')"><div class="agent-dot online"></div><div><div class="agent-name">Lead Finder</div><div class="agent-squad">Ops Squad</div></div></div>
+      <div class="agent-item" onclick="selectAgent(this,'Scorer')"><div class="agent-dot online"></div><div><div class="agent-name">Scorer</div><div class="agent-squad">Ops Squad</div></div></div>
+      <div class="agent-item" onclick="selectAgent(this,'Copywriter')"><div class="agent-dot online"></div><div><div class="agent-name">Copywriter</div><div class="agent-squad">Ops Squad</div></div></div>
+      <div class="agent-item" onclick="selectAgent(this,'CRM Agent')"><div class="agent-dot online"></div><div><div class="agent-name">CRM Agent</div><div class="agent-squad">Ops Squad</div></div></div>
+      <div class="agent-item" onclick="selectAgent(this,'Email Agent')"><div class="agent-dot online"></div><div><div class="agent-name">Email Agent</div><div class="agent-squad">Outreach Squad</div></div></div>
+      <div class="agent-item" onclick="selectAgent(this,'Voice Agent')"><div class="agent-dot online"></div><div><div class="agent-name">Voice Agent</div><div class="agent-squad">Outreach Squad</div></div></div>
+      <div class="agent-item" onclick="selectAgent(this,'Reporter')"><div class="agent-dot building"></div><div><div class="agent-name">Reporter</div><div class="agent-squad">Support Squad</div></div></div>
+      <div class="agent-item" onclick="selectAgent(this,'Watchdog')"><div class="agent-dot idle"></div><div><div class="agent-name">Watchdog</div><div class="agent-squad">Support Squad</div></div></div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-label">Mission Status</div>
+      <div class="mission-chips">
+        <div class="mission-chip"><div class="chip-dot running"></div>Lead Gen Pipeline</div>
+        <div class="mission-chip"><div class="chip-dot done"></div>Agency Website</div>
+        <div class="mission-chip"><div class="chip-dot done"></div>Voice Agent</div>
+        <div class="mission-chip"><div class="chip-dot done"></div>Google Sheets CRM</div>
+        <div class="mission-chip"><div class="chip-dot done"></div>Email Sequences</div>
+        <div class="mission-chip"><div class="chip-dot done"></div>ElevenLabs Calling</div>
+        <div class="mission-chip"><div class="chip-dot idle"></div>Instagram Automation</div>
+        <div class="mission-chip"><div class="chip-dot idle"></div>Daily Reporter</div>
+        <div class="mission-chip"><div class="chip-dot idle"></div>Lead Scorer</div>
+      </div>
+    </div>
   </div>
 
-  <div class="hero-desc">Deploy an autonomous AI agent army that finds leads, writes personalized emails, books meetings, and calls prospects — while you focus on closing.</div>
-
-  <div class="hero-btns">
-    <a href="https://calendly.com/elevauto/free-strategy-call" target="_blank" class="btn-y">Book a Free Strategy Call</a>
-    <a href="#services" class="btn-ghost">See Capabilities →</a>
-  </div>
-
-  <div class="status-strip">
-    <div class="s-item"><div class="s-dot"></div>Lead Gen — Active</div>
-    <div class="s-item"><div class="s-dot"></div>Voice Agent — Online</div>
-    <div class="s-item"><div class="s-dot"></div>Email Sequences — Running</div>
-    <div class="s-item"><div class="s-dot dim"></div>LinkedIn — Standby</div>
-    <div class="s-ticker">SYS v4.2 · OPERATIONAL</div>
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section id="services" class="section">
-  <div class="sec-eyebrow reveal">Capabilities</div>
-  <div class="sec-title reveal">Six agents.<br><em>One command.</em></div>
-  <div class="svc-grid">
-
-    <div class="svc-card reveal">
-      <div class="svc-num">[ 01 ]</div>
-      <div class="svc-icon">⊙</div>
-      <div class="svc-name">Lead Generation</div>
-      <div class="svc-desc">AI scours LinkedIn, Google, and Apollo to find ideal prospects by niche, title, and company — auto-logged to your CRM.</div>
-      <div class="svc-tag"><span>Apollo</span><span>LinkedIn</span></div>
-    </div>
-
-    <div class="svc-card reveal">
-      <div class="svc-num">[ 02 ]</div>
-      <div class="svc-icon">✉</div>
-      <div class="svc-name">Email Outreach</div>
-      <div class="svc-desc">Claude writes hyper-personalized sequences for every lead. Apollo fires them automatically at the perfect time.</div>
-      <div class="svc-tag"><span>Claude</span><span>Apollo</span></div>
-    </div>
-
-    <div class="svc-card reveal">
-      <div class="svc-num">[ 03 ]</div>
-      <div class="svc-icon">◈</div>
-      <div class="svc-name">Voice Calling</div>
-      <div class="svc-desc">ElevenLabs AI voice calls your HOT leads via Twilio — books meetings, handles objections, qualifies on autopilot.</div>
-      <div class="svc-tag"><span>ElevenLabs</span><span>Twilio</span></div>
-    </div>
-
-    <div class="svc-card reveal">
-      <div class="svc-num">[ 04 ]</div>
-      <div class="svc-icon">⬡</div>
-      <div class="svc-name">CRM Automation</div>
-      <div class="svc-desc">Every lead, touchpoint, and reply auto-logged. Your pipeline stays clean and current without lifting a finger.</div>
-      <div class="svc-tag"><span>Google Sheets</span><span>n8n</span></div>
-    </div>
-
-    <div class="svc-card reveal">
-      <div class="svc-num">[ 05 ]</div>
-      <div class="svc-icon">⟁</div>
-      <div class="svc-name">Instagram DMs</div>
-      <div class="svc-desc">AI agents turn comments, story replies, and DMs into booked calls. Keyword triggers fire your lead magnets automatically.</div>
-      <div class="svc-tag"><span>Boosend</span><span>Instagram</span></div>
-    </div>
-
-    <div class="svc-card reveal">
-      <div class="svc-num">[ 06 ]</div>
-      <div class="svc-icon">▦</div>
-      <div class="svc-name">Command Center</div>
-      <div class="svc-desc">Daily 7am report delivered to your inbox — leads captured, emails sent, calls booked, revenue tracked. Full visibility, zero manual work.</div>
-      <div class="svc-tag"><span>n8n</span><span>Claude</span></div>
-    </div>
-
-  </div>
-</section>
-
-<!-- PROCESS -->
-<section id="process" class="section">
-  <div class="sec-eyebrow reveal">How It Works</div>
-  <div class="sec-title reveal">Deployed in<br><em>four moves.</em></div>
-  <div class="proc-layout">
-    <div class="proc-steps">
-
-      <div class="pstep reveal">
-        <div class="pstep-n">01</div>
-        <div>
-          <div class="pstep-name">Strategy Call</div>
-          <div class="pstep-desc">We map your ICP, goals, and current stack. 30 minutes to understand your business and identify the highest-ROI automations to deploy first.</div>
+  <div class="main">
+    <div class="messages" id="messages">
+      <div class="msg">
+        <div class="msg-avatar avatar-cmd">CC</div>
+        <div class="msg-body">
+          <div class="msg-header"><span class="msg-name">Command Center</span><span class="msg-badge badge-cmd">System</span><span class="msg-time" id="initTime"></span></div>
+          <div class="msg-text">Command Center online. All 11 agents standing by. Awaiting your orders, General.</div>
         </div>
       </div>
-
-      <div class="pstep reveal">
-        <div class="pstep-n">02</div>
-        <div>
-          <div class="pstep-name">Build & Configure</div>
-          <div class="pstep-desc">We build your full agent army — lead finder, email sequences, voice caller, CRM logger, and Command Center report — all connected and tested.</div>
-        </div>
-      </div>
-
-      <div class="pstep reveal">
-        <div class="pstep-n">03</div>
-        <div>
-          <div class="pstep-name">Launch & Monitor</div>
-          <div class="pstep-desc">Your army goes live. We monitor performance, tune sequences, and optimize targeting in the first 14 days to maximize results.</div>
-        </div>
-      </div>
-
-      <div class="pstep reveal">
-        <div class="pstep-n">04</div>
-        <div>
-          <div class="pstep-name">Scale</div>
-          <div class="pstep-desc">Once the system is proven, we expand — more channels, more agents, more automation layers. You close deals. We handle the rest.</div>
-        </div>
-      </div>
-
     </div>
-
-    <div class="terminal reveal">
-      <div class="term-bar">
-        <div class="tdot td1"></div>
-        <div class="tdot td2"></div>
-        <div class="tdot td3"></div>
-        <div class="term-title">ea-agent-army · live</div>
+    <div class="input-area">
+      <div class="quick-cmds">
+        <div class="quick-cmd" onclick="setCmd('Find 25 roofing owners in Nevada')">Find roofing leads</div>
+        <div class="quick-cmd" onclick="setCmd('Find 25 HVAC owners in Las Vegas')">Find HVAC leads</div>
+        <div class="quick-cmd" onclick="setCmd('Run the full lead gen pipeline')">Run pipeline</div>
+        <div class="quick-cmd" onclick="setCmd('Write outreach copy for hot leads')">Write copy</div>
+        <div class="quick-cmd" onclick="setCmd('Generate my daily command center report')">Daily report</div>
       </div>
-      <div class="term-body">
-        <div class="tl"><span class="pr">ea</span> <span class="dim">~</span> <span class="cmd">initializing lead scan...</span></div>
-        <div class="tl"><span class="ok">✓</span> Apollo connected · 2,400 prospects found</div>
-        <div class="tl"><span class="ok">✓</span> ICP filter applied · <span class="hi">847 qualified</span></div>
-        <div class="tl"><span class="dim">—</span> Enriching with LinkedIn data...</div>
-        <div class="tl"><span class="ok">✓</span> Claude generating personalized sequences</div>
-        <div class="tl"><span class="ok">✓</span> 847 emails queued · sending at optimal time</div>
-        <div class="tl"><span class="dim">—</span> Monitoring replies...</div>
-        <div class="tl"><span class="ok">✓</span> <span class="hi">12 hot leads</span> detected · routing to voice agent</div>
-        <div class="tl"><span class="ok">✓</span> ElevenLabs dialing via Twilio...</div>
-        <div class="tl"><span class="ok">✓</span> <span class="hi">3 meetings booked</span> · logged to CRM</div>
-        <div class="tl"><span class="pr">ea</span> <span class="dim">~</span> <span class="cblink"></span></div>
+      <div class="input-row">
+        <textarea class="cmd-input" id="cmdInput" placeholder="Issue command, General..." onkeydown="handleKey(event)" oninput="autoResize(this)" rows="1"></textarea>
+        <button class="mic-btn" id="micBtn" onclick="toggleVoice()">🎙</button>
+        <button class="send-btn" id="sendBtn" onclick="sendCommand()">Deploy</button>
       </div>
     </div>
   </div>
-</section>
 
-<!-- PRICING -->
-<section id="pricing" class="section">
-  <div class="sec-eyebrow reveal">Investment</div>
-  <div class="sec-title reveal">Pick your<br><em>deployment tier.</em></div>
-  <div class="price-grid">
-
-    <div class="price-card reveal">
-      <div class="plan-tier">Starter</div>
-      <div class="plan-p"><sup>$</sup>997</div>
-      <div class="plan-mo">/ month</div>
-      <div class="plan-div"></div>
-      <div class="plan-feats">
-        <div class="plan-feat"><span class="pf-check">▸</span>Lead generation (250/mo)</div>
-        <div class="plan-feat"><span class="pf-check">▸</span>Email sequences (Claude)</div>
-        <div class="plan-feat"><span class="pf-check">▸</span>CRM auto-logging</div>
-        <div class="plan-feat"><span class="pf-check">▸</span>Weekly report</div>
-        <div class="plan-feat"><span class="pf-check">▸</span>1 revision / month</div>
-      </div>
-      <a href="https://buy.stripe.com/6oUaEY6yb3T2c3Z6ay83C02" target="_blank" class="plan-btn">Deploy Starter</a>
-    </div>
-
-    <div class="price-card feat reveal">
-      <div class="plan-badge">Most Popular</div>
-      <div class="plan-tier">Growth</div>
-      <div class="plan-p"><sup>$</sup>1,997</div>
-      <div class="plan-mo">/ month</div>
-      <div class="plan-div"></div>
-      <div class="plan-feats">
-        <div class="plan-feat"><span class="pf-check">▸</span>Lead generation (500/mo)</div>
-        <div class="plan-feat"><span class="pf-check">▸</span>Email + voice calling</div>
-        <div class="plan-feat"><span class="pf-check">▸</span>Instagram DM automation</div>
-        <div class="plan-feat"><span class="pf-check">▸</span>CRM + Command Center</div>
-        <div class="plan-feat"><span class="pf-check">▸</span>Daily 7am report</div>
-        <div class="plan-feat"><span class="pf-check">▸</span>Unlimited revisions</div>
-      </div>
-      <a href="https://buy.stripe.com/3cIbJ26yb75e9VR56u83C03" target="_blank" class="plan-btn">Deploy Growth</a>
-    </div>
-
-    <div class="price-card reveal">
-      <div class="plan-tier">Elite</div>
-      <div class="plan-p"><sup>$</sup>1,997</div>
-      <div class="plan-mo">/ month</div>
-      <div class="plan-div"></div>
-      <div class="plan-feats">
-        <div class="plan-feat"><span class="pf-check">▸</span>Full 11-agent army</div>
-        <div class="plan-feat"><span class="pf-check">▸</span>Unlimited leads</div>
-        <div class="plan-feat"><span class="pf-check">▸</span>Custom AI voice clone</div>
-        <div class="plan-feat"><span class="pf-check">▸</span>Multi-channel outreach</div>
-        <div class="plan-feat"><span class="pf-check">▸</span>Dedicated build team</div>
-        <div class="plan-feat"><span class="pf-check">▸</span>Weekly strategy PDF guide</div>
-      </div>
-      <a href="https://buy.stripe.com/28E14o9Kn4X61pl42q83C01" target="_blank" class="plan-btn">Deploy Elite</a>
-    </div>
-
-  </div>
-</section>
-
-<!-- SIGNUP -->
-<section id="signup" class="section">
-  <div class="su-layout">
-    <div class="reveal">
-      <div class="sec-eyebrow">Get Started</div>
-      <div class="sec-title" style="margin-bottom:20px;">Ready to deploy<br><em>your army?</em></div>
-      <div style="font-size:13px;line-height:1.9;color:var(--muted);margin-bottom:28px;">Tell us about your business and we'll build a custom automation strategy — no obligation, just clarity on what's possible.</div>
-      <div class="su-feats">
-        <div class="su-feat"><div class="su-dot"></div>Free 30-min strategy call</div>
-        <div class="su-feat"><div class="su-dot"></div>Custom automation roadmap</div>
-        <div class="su-feat"><div class="su-dot"></div>Live demo of your agent army</div>
-        <div class="su-feat"><div class="su-dot"></div>No contracts, cancel anytime</div>
+  <div class="right-panel">
+    <div class="panel-section">
+      <div class="panel-title"><span>Live Stats</span></div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-val" id="statLeads">0</div><div class="stat-lbl">Leads Today</div></div>
+        <div class="stat-card"><div class="stat-val" id="statHot">0</div><div class="stat-lbl">Hot Leads</div></div>
+        <div class="stat-card"><div class="stat-val" id="statEmails">0</div><div class="stat-lbl">Emails Sent</div></div>
+        <div class="stat-card"><div class="stat-val" id="statMeetings">0</div><div class="stat-lbl">Meetings</div></div>
       </div>
     </div>
-
-    <div class="su-form reveal">
-      <div class="form-hd">Deploy Request</div>
-      <form class="form-fs" action="https://formspree.io/f/mojrkegb" method="POST">
-        <div class="form-f">
-          <div class="form-lbl">Full Name</div>
-          <input class="form-inp" type="text" name="name" placeholder="John Smith" required>
-        </div>
-        <div class="form-f">
-          <div class="form-lbl">Email</div>
-          <input class="form-inp" type="email" name="email" placeholder="john@company.com" required>
-        </div>
-        <div class="form-f">
-          <div class="form-lbl">Business Type</div>
-          <select class="form-sel" name="business_type">
-            <option value="">Select...</option>
-            <option>Agency</option>
-            <option>SaaS / Tech</option>
-            <option>Consulting</option>
-            <option>E-commerce</option>
-            <option>Real Estate</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="form-f">
-          <div class="form-lbl">Monthly Revenue</div>
-          <select class="form-sel" name="revenue">
-            <option value="">Select...</option>
-            <option>Pre-revenue</option>
-            <option>$1k – $10k</option>
-            <option>$10k – $50k</option>
-            <option>$50k – $100k</option>
-            <option>$100k+</option>
-          </select>
-        </div>
-        <button type="submit" class="form-sub">[ Deploy My Army ]</button>
-      </form>
+    <div class="sidebar-divider"></div>
+    <div class="panel-section">
+      <div class="panel-title"><span>Active Pipelines</span><span style="color:var(--accent);font-size:0.65rem;">3</span></div>
+      <div class="pipeline-item"><div class="pipeline-header"><span class="pipeline-name">Lead Gen Pipeline</span><span class="pipeline-badge pb-live">Live</span></div><div class="pipeline-meta">Next run: 8:00 AM tomorrow</div><div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div></div>
+      <div class="pipeline-item"><div class="pipeline-header"><span class="pipeline-name">Voice Agent</span><span class="pipeline-badge pb-live">Live</span></div><div class="pipeline-meta">ElevenLabs active</div><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div></div>
+      <div class="pipeline-item"><div class="pipeline-header"><span class="pipeline-name">Email Sequences</span><span class="pipeline-badge pb-live">Live</span></div><div class="pipeline-meta">Apollo sequence active</div><div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div></div>
+      <div class="pipeline-item"><div class="pipeline-header"><span class="pipeline-name">Instagram Automation</span><span class="pipeline-badge pb-building">Building</span></div><div class="pipeline-meta">Boosend setup pending</div><div class="progress-bar"><div class="progress-fill" style="width:20%"></div></div></div>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="panel-section">
+      <div class="panel-title"><span>Quick Build</span></div>
+      <div class="build-grid">
+        <button class="build-btn" onclick="quickBuild('email')">Email Agent</button>
+        <button class="build-btn" onclick="quickBuild('linkedin')">LinkedIn Bot</button>
+        <button class="build-btn" onclick="quickBuild('calling')">Voice Caller</button>
+        <button class="build-btn" onclick="quickBuild('reporting')">Daily Report</button>
+      </div>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="panel-section">
+      <div class="panel-title"><span>Activity Log</span></div>
+      <div class="activity-item"><span class="activity-time" id="actTime1"></span><span class="activity-text">Command Center initialized</span></div>
     </div>
   </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="ft-brand">
-    <div class="nav-dot" style="width:5px;height:5px;"></div>
-    Elevated Automations
+  <div class="bottom-bar">
+    <div class="bb-item"><div class="bb-dot active"></div>Lead Gen — Active</div>
+    <div class="bb-item"><div class="bb-dot active"></div>Voice Agent — Online</div>
+    <div class="bb-item"><div class="bb-dot active"></div>Email Sequences — Running</div>
+    <div class="bb-item"><div class="bb-dot active"></div>CRM — Synced</div>
+    <div class="bb-item"><div class="bb-dot dim"></div>Instagram — Pending</div>
+    <div style="margin-left:auto;color:rgba(232,234,237,0.1);letter-spacing:2px;">SYS v4.2 · OPERATIONAL</div>
   </div>
-  <div class="ft-links">
-    <a href="#services">Services</a>
-    <a href="#process">Process</a>
-    <a href="#pricing">Pricing</a>
-    <a href="mailto:hello@elevatedautomations.org">Contact</a>
+
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <h2 class="modal-title">Configure Command Center</h2>
+    <p class="modal-sub">Connect your n8n webhooks. Saved locally in your browser.</p>
+    <div class="field"><label>n8n Main Webhook URL</label><input type="text" id="n8nWebhook" placeholder="https://your-n8n.cloud/webhook/..."/></div>
+    <div class="field"><label>n8n TTS Webhook URL (Voice)</label><input type="text" id="ttsWebhook" placeholder="https://your-n8n.cloud/webhook/tts"/></div>
+    <div class="field"><label>n8n Lead Finder Webhook URL</label><input type="text" id="leadWebhook" placeholder="https://your-n8n.cloud/webhook/leads"/></div>
+    <div class="field"><label>OpenAI API Key (Voice Transcription)</label><input type="password" id="openaiKey" placeholder="sk-..."/></div>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="closeSettings()">Cancel</button>
+      <button class="modal-btn primary" onclick="saveSettings()">Save Configuration</button>
+    </div>
   </div>
-  <div class="ft-copy">© 2025 Elevated Automations</div>
-</footer>
+</div>
 
 <script>
-// Cursor
-const cur = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-if(cur && ring){
-  document.addEventListener('mousemove', e => {
-    cur.style.left = e.clientX - 3 + 'px';
-    cur.style.top  = e.clientY - 3 + 'px';
-    ring.style.left = e.clientX - 14 + 'px';
-    ring.style.top  = e.clientY - 14 + 'px';
-  });
+var cfg={
+  n8nWebhook:'https://cjnf.app.n8n.cloud/webhook/e5d04b1b-b5f9-4c58-bbc4-f11f65192d4d',
+  ttsWebhook:'https://cjnf.app.n8n.cloud/webhook/3259a034-cb48-4807-8592-9bd574262b1c',
+  leadWebhook:'https://cjnf.app.n8n.cloud/webhook/b3dd4116-147e-45c3-ae6d-0ebae6bb59ce',
+  openai:''
+};
+try{var s=localStorage.getItem('cmdCenterCfg');if(s)cfg=Object.assign({},cfg,JSON.parse(s));}catch(e){}
+
+function updateClock(){var n=new Date();document.getElementById('clock').textContent=n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});}
+setInterval(updateClock,1000);updateClock();
+function now(){return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});}
+document.getElementById('initTime').textContent=now();
+document.getElementById('actTime1').textContent=now();
+
+function openSettings(){document.getElementById('n8nWebhook').value=cfg.n8nWebhook;document.getElementById('ttsWebhook').value=cfg.ttsWebhook;document.getElementById('leadWebhook').value=cfg.leadWebhook;document.getElementById('openaiKey').value=cfg.openai;document.getElementById('modal').classList.add('open');}
+function closeSettings(){document.getElementById('modal').classList.remove('open');}
+function saveSettings(){cfg.n8nWebhook=document.getElementById('n8nWebhook').value.trim();cfg.ttsWebhook=document.getElementById('ttsWebhook').value.trim();cfg.leadWebhook=document.getElementById('leadWebhook').value.trim();cfg.openai=document.getElementById('openaiKey').value.trim();try{localStorage.setItem('cmdCenterCfg',JSON.stringify(cfg));}catch(e){}closeSettings();addMessage('cmd','Command Center','Configuration saved. All webhooks connected.','System');}
+function selectAgent(el,name){document.querySelectorAll('.agent-item').forEach(function(i){i.classList.remove('active');});el.classList.add('active');addMessage('cmd','Command Center',name+' selected and standing by.','Agent');}
+
+function addMessage(type,name,content,badge){
+  badge=badge||'';
+  var msgs=document.getElementById('messages');
+  var div=document.createElement('div');
+  div.className='msg'+(type==='you'?' you':'');
+  var ac=type==='you'?'avatar-you':type==='agent'?'avatar-agent':'avatar-cmd';
+  var at=type==='you'?'YOU':type==='agent'?'AG':'CC';
+  var bc=type==='you'?'badge-you':type==='agent'?'badge-agent':'badge-cmd';
+  div.innerHTML='<div class="msg-avatar '+ac+'">'+at+'</div><div class="msg-body"><div class="msg-header"><span class="msg-name">'+name+'</span>'+(badge?'<span class="msg-badge '+bc+'">'+badge+'</span>':'')+'<span class="msg-time">'+now()+'</span></div><div class="msg-text">'+content+'</div></div>';
+  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+}
+function addTyping(){var msgs=document.getElementById('messages');var div=document.createElement('div');div.className='msg';div.id='typing-indicator';div.innerHTML='<div class="msg-avatar avatar-cmd">CC</div><div class="msg-body"><div class="msg-header"><span class="msg-name">Command Center</span></div><div class="msg-text"><div class="typing"><span></span><span></span><span></span></div></div></div>';msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
+function removeTyping(){var t=document.getElementById('typing-indicator');if(t)t.remove();}
+function addActivity(text){var section=document.querySelector('.right-panel .panel-section:last-child');if(!section)return;var d=document.createElement('div');d.className='activity-item';d.innerHTML='<span class="activity-time">'+now()+'</span><span class="activity-text">'+text+'</span>';section.insertBefore(d,section.children[1]);}
+
+function cleanForTTS(text){return text.replace(/<[^>]*>/g,'').replace(/\*\*/g,'').replace(/\*/g,'').replace(/#{1,6}\s?/g,'').replace(/=+/g,'').replace(/\[([^\]]+)\]/g,'$1').replace(/\u2192/g,' to ').replace(/[-\u2022]\s/g,'').replace(/`/g,'').replace(/Token budget:.*$/g,'').replace(/\n\n/g,'. ').replace(/\n/g,' ').replace(/\s{2,}/g,' ').trim();}
+
+function speak(text){
+  if(!cfg.ttsWebhook)return;
+  var clean=cleanForTTS(text).substring(0,450);
+  if(!clean||clean.length<3)return;
+  fetch(cfg.ttsWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:clean})})
+  .then(function(res){if(!res.ok)return null;return res.blob();})
+  .then(function(blob){if(!blob||blob.size<1000)return;new Audio(URL.createObjectURL(blob)).play().catch(function(){});})
+  .catch(function(e){console.log('TTS error:',e);});
 }
 
-// Hamburger
-const ham = document.getElementById('navHam');
-const links = document.getElementById('navLinks');
-if(ham && links){
-  ham.addEventListener('click', () => {
-    links.classList.toggle('open');
-  });
-  // Close on link tap
-  links.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => links.classList.remove('open'));
-  });
+function parseLeadCommand(cmd){
+  var titleMatch=cmd.match(/\b(ceo|founder|owner|vp|head|cmo|coo|president|director|manager)\b/i);
+  var title=titleMatch?titleMatch[0].toUpperCase():'Owner';
+  var nicheMatch=cmd.match(/(?:find|search|get)\s+\d*\s*([a-zA-Z]+(?:\s+[a-zA-Z]+)?)\s+(?:leads?|owners?|ceos?|founders?|contractors?|companies|businesses)/i);
+  var locationMatch=cmd.match(/\bin\s+([a-zA-Z]+(?:\s+[a-zA-Z]+)?)\s*(?:area|region|state)?/i);
+  var niche=nicheMatch?nicheMatch[1].trim():'Roofing';
+  var location=locationMatch?locationMatch[1].trim():'';
+  return {niche:niche,title:title,location:location};
 }
 
-// Reveal on scroll
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.12 });
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+function sendCommand(){
+  var input=document.getElementById('cmdInput');
+  var cmd=input.value.trim();
+  if(!cmd)return;
+  addMessage('you','Jenale',cmd,'General');
+  input.value='';input.style.height='auto';
+  processCommand(cmd);
+}
+
+function processCommand(cmd){
+  addTyping();
+  document.getElementById('sendBtn').disabled=true;
+  var isLeadSearch=/find|search|leads?|prospect/i.test(cmd);
+
+  if(isLeadSearch&&cfg.leadWebhook){
+    var parsed=parseLeadCommand(cmd);
+    var niche=parsed.niche;
+    var title=parsed.title;
+    var location=parsed.location;
+    fetch(cfg.leadWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({niche:niche,title:title,location:location})})
+    .then(function(res){
+      if(!res.ok)throw new Error('Lead finder failed');
+      var locationStr=location?' in '+location:'';
+      var reply='DISPATCHING: Lead Finder to searchin '+niche+' '+title+' leads'+locationStr+' now. Results loggin to your EA Lead Finder CRM. Check the sheet, General.';
+      removeTyping();
+      addMessage('cmd','Command Center',reply,'Dispatch');
+      speak(reply);
+      addActivity('Lead search: '+niche+' '+title+(location?' - '+location:''));
+      document.getElementById('sendBtn').disabled=false;
+    })
+    .catch(function(err){
+      removeTyping();
+      addMessage('cmd','Command Center','Connection error: '+err.message,'Error');
+      document.getElementById('sendBtn').disabled=false;
+    });
+  } else {
+    fetch(cfg.n8nWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({command:cmd})})
+    .then(function(res){
+      if(!res.ok)throw new Error('n8n webhook failed — make sure Command Center Main is active in n8n');
+      return res.json();
+    })
+    .then(function(data){
+      var reply=data.reply||'Standing by, General.';
+      removeTyping();
+      addMessage('cmd','Command Center',reply.replace(/\n/g,'<br>'),'Dispatch');
+      speak(reply);
+      addActivity('Command: '+cmd.substring(0,40)+(cmd.length>40?'...':''));
+      document.getElementById('sendBtn').disabled=false;
+    })
+    .catch(function(err){
+      removeTyping();
+      addMessage('cmd','Command Center','Connection error: '+err.message,'Error');
+      document.getElementById('sendBtn').disabled=false;
+    });
+  }
+}
+
+var mediaRecorder,audioChunks=[],isRecording=false,stream;
+function toggleVoice(){
+  if(isRecording){stopVoice();return;}
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(s){
+    stream=s;mediaRecorder=new MediaRecorder(stream);audioChunks=[];
+    mediaRecorder.ondataavailable=function(e){audioChunks.push(e.data);};
+    mediaRecorder.onstop=handleVoiceEnd;mediaRecorder.start();isRecording=true;
+    document.getElementById('micBtn').classList.add('recording');
+    document.getElementById('voiceTopBtn').classList.add('recording');
+    addMessage('cmd','Command Center','Listenin... click mic again to send.','Voice');
+  }).catch(function(){addMessage('cmd','Command Center','Mic access denied.','Error');});
+}
+function stopVoice(){if(!isRecording)return;isRecording=false;document.getElementById('micBtn').classList.remove('recording');document.getElementById('voiceTopBtn').classList.remove('recording');if(mediaRecorder&&mediaRecorder.state!=='inactive')mediaRecorder.stop();if(stream)stream.getTracks().forEach(function(t){t.stop();});}
+function handleVoiceEnd(){if(!cfg.openai){addMessage('cmd','Command Center','No OpenAI key for transcription.','Error');return;}addTyping();var blob=new Blob(audioChunks,{type:'audio/webm'});var form=new FormData();form.append('file',blob,'audio.webm');form.append('model','whisper-1');fetch('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{Authorization:'Bearer '+cfg.openai},body:form}).then(function(r){return r.json();}).then(function(data){removeTyping();if(data.text){document.getElementById('cmdInput').value=data.text;sendCommand();}}).catch(function(err){removeTyping();addMessage('cmd','Command Center','Transcription failed: '+err.message,'Error');});}
+
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendCommand();}}
+function setCmd(text){var i=document.getElementById('cmdInput');i.value=text;i.focus();}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
+function quickBuild(type){var cmds={email:'Build an email sequence agent using Apollo',linkedin:'Build a LinkedIn automation agent using Phantombuster',calling:'Build an ElevenLabs calling agent for HOT leads',reporting:'Build a daily reporter agent that sends summaries at 7am'};setCmd(cmds[type]);document.getElementById('cmdInput').focus();}
+document.addEventListener('click',function unlock(){new(window.AudioContext||window.webkitAudioContext)().resume();document.removeEventListener('click',unlock);},{once:true});
 </script>
 </body>
 </html>
