@@ -268,9 +268,19 @@ footer{padding:36px 48px;border-top:1px solid var(--border);display:flex;align-i
   .plan-badge{font-size:6px;padding:3px 8px;}
 
   /* SIGNUP */
-  .su-layout{grid-template-columns:1fr;gap:36px;}
-  .su-form{padding:24px 18px;}
+  #signup{padding:64px 20px;}
+  .su-layout{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:36px;
+    width:100%;
+  }
+  .su-layout > *{width:100% !important;max-width:100% !important;}
+  .su-form{padding:24px 18px;width:100%;box-sizing:border-box;}
   .su-feats{gap:10px;}
+  .sec-title{font-size:32px !important;}
+  .form-inp,.form-sel{width:100%;font-size:14px;}
+  .form-sub{font-size:10px;letter-spacing:2px;}
 
   /* FOOTER */
   footer{
@@ -322,9 +332,348 @@ footer{padding:36px 48px;border-top:1px solid var(--border);display:flex;align-i
 
   <div class="hero-hud">
     <div class="hud-row">
-      <div class="hud-val">50+</div>
+      <div class="hud-val">100+</div>
       <div class="hud-lbl">Leads / month</div>
       <div class="hud-bar"><div class="hud-fill" style="--w:85%"></div></div>
     </div>
     <div class="hud-row">
-   
+      <div class="hud-val">97%</div>
+      <div class="hud-lbl">Deliverability</div>
+      <div class="hud-bar"><div class="hud-fill" style="--w:97%"></div></div>
+    </div>
+    <div class="hud-row">
+      <div class="hud-val">24/7</div>
+      <div class="hud-lbl">Army active</div>
+      <div class="hud-bar"><div class="hud-fill" style="--w:100%"></div></div>
+    </div>
+  </div>
+
+  <div class="hero-tag">AI Agent Army · All Systems Operational</div>
+
+  <div class="hero-title">
+    <svg width="620" height="112" viewBox="0 0 620 112" style="max-width:100%;height:auto;">
+      <defs>
+        <filter id="gl">
+          <feOffset in="SourceGraphic" dx="-1.2" dy="0.7" result="r"/>
+          <feFlood flood-color="rgba(255,214,0,0.32)" result="rc"/>
+          <feComposite in="rc" in2="r" operator="in" result="cy"/>
+          <feOffset in="SourceGraphic" dx="1.2" dy="-0.7" result="b"/>
+          <feFlood flood-color="rgba(180,80,0,0.22)" result="bc"/>
+          <feComposite in="bc" in2="b" operator="in" result="or"/>
+          <feMerge><feMergeNode in="cy"/><feMergeNode in="or"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <linearGradient id="autoG" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="rgba(245,240,232,0.45)"/>
+          <stop offset="35%" stop-color="rgba(245,240,232,0.85)"/>
+          <stop offset="50%" stop-color="#ffffff"/>
+          <stop offset="65%" stop-color="rgba(245,240,232,0.85)"/>
+          <stop offset="100%" stop-color="rgba(245,240,232,0.45)"/>
+        </linearGradient>
+      </defs>
+      <g filter="url(#gl)" fill="#F5F0E8">
+        <rect x="2" y="6" width="24" height="2.2"/>
+        <rect x="7" y="24" width="17" height="2.2"/>
+        <rect x="2" y="42" width="24" height="2.2"/>
+        <text x="34" y="48" font-family="Raleway,sans-serif" font-weight="100" font-size="52" letter-spacing="9">LEVATED</text>
+      </g>
+      <g filter="url(#gl)">
+        <line x1="1" y1="100" x2="17" y2="65" stroke="#F5F0E8" stroke-width="1.8"/>
+        <line x1="17" y1="65" x2="33" y2="100" stroke="#F5F0E8" stroke-width="1.8"/>
+        <text x="33" y="100" font-family="Raleway,sans-serif" font-weight="100" font-size="42" letter-spacing="7" fill="url(#autoG)">UTOMATIONS</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="hero-desc">Deploy an autonomous AI agent army that finds leads, writes personalized emails, books meetings, and calls prospects — while you focus on closing.</div>
+
+  <div class="hero-btns">
+    <a href="https://calendly.com/elevauto/free-strategy-call" target="_blank" class="btn-y">Book a Free Strategy Call</a>
+    <a href="#services" class="btn-ghost">See Capabilities →</a>
+  </div>
+
+  <div class="status-strip">
+    <div class="s-item"><div class="s-dot"></div>Lead Gen — Active</div>
+    <div class="s-item"><div class="s-dot"></div>Voice Agent — Online</div>
+    <div class="s-item"><div class="s-dot"></div>Email Sequences — Running</div>
+    <div class="s-item"><div class="s-dot dim"></div>LinkedIn — Standby</div>
+    <div class="s-ticker">SYS v4.2 · OPERATIONAL</div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="section">
+  <div class="sec-eyebrow reveal">Capabilities</div>
+  <div class="sec-title reveal">Six agents.<br><em>One command.</em></div>
+  <div class="svc-grid">
+
+    <div class="svc-card reveal">
+      <div class="svc-num">[ 01 ]</div>
+      <div class="svc-icon">⊙</div>
+      <div class="svc-name">Lead Generation</div>
+      <div class="svc-desc">AI scours LinkedIn, Google, and Apollo to find ideal prospects by niche, title, and company — auto-logged to your CRM.</div>
+    </div>
+
+    <div class="svc-card reveal">
+      <div class="svc-num">[ 02 ]</div>
+      <div class="svc-icon">✉</div>
+      <div class="svc-name">Email Outreach</div>
+      <div class="svc-desc">Claude writes hyper-personalized sequences for every lead. Apollo fires them automatically at the perfect time.</div>
+    </div>
+
+    <div class="svc-card reveal">
+      <div class="svc-num">[ 03 ]</div>
+      <div class="svc-icon">◈</div>
+      <div class="svc-name">Voice Calling</div>
+      <div class="svc-desc">ElevenLabs AI voice calls your HOT leads via Twilio — books meetings, handles objections, qualifies on autopilot.</div>
+    </div>
+
+    <div class="svc-card reveal">
+      <div class="svc-num">[ 04 ]</div>
+      <div class="svc-icon">⬡</div>
+      <div class="svc-name">CRM Automation</div>
+      <div class="svc-desc">Every lead, touchpoint, and reply auto-logged. Your pipeline stays clean and current without lifting a finger.</div>
+    </div>
+
+    <div class="svc-card reveal">
+      <div class="svc-num">[ 05 ]</div>
+      <div class="svc-icon">⟁</div>
+      <div class="svc-name">Instagram DMs</div>
+      <div class="svc-desc">AI agents turn comments, story replies, and DMs into booked calls. Keyword triggers fire your lead magnets automatically.</div>
+    </div>
+
+    <div class="svc-card reveal">
+      <div class="svc-num">[ 06 ]</div>
+      <div class="svc-icon">▦</div>
+      <div class="svc-name">Command Center</div>
+      <div class="svc-desc">Daily 7am report delivered to your inbox — leads captured, emails sent, calls booked, revenue tracked. Full visibility, zero manual work.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process" class="section">
+  <div class="sec-eyebrow reveal">How It Works</div>
+  <div class="sec-title reveal">Deployed in<br><em>four moves.</em></div>
+  <div class="proc-layout">
+    <div class="proc-steps">
+
+      <div class="pstep reveal">
+        <div class="pstep-n">01</div>
+        <div>
+          <div class="pstep-name">Strategy Call</div>
+          <div class="pstep-desc">We map your ICP, goals, and current stack. 30 minutes to understand your business and identify the highest-ROI automations to deploy first.</div>
+        </div>
+      </div>
+
+      <div class="pstep reveal">
+        <div class="pstep-n">02</div>
+        <div>
+          <div class="pstep-name">Build & Configure</div>
+          <div class="pstep-desc">We build your full agent army — lead finder, email sequences, voice caller, CRM logger, and Command Center report — all connected and tested.</div>
+        </div>
+      </div>
+
+      <div class="pstep reveal">
+        <div class="pstep-n">03</div>
+        <div>
+          <div class="pstep-name">Launch & Monitor</div>
+          <div class="pstep-desc">Your army goes live. We monitor performance, tune sequences, and optimize targeting in the first 14 days to maximize results.</div>
+        </div>
+      </div>
+
+      <div class="pstep reveal">
+        <div class="pstep-n">04</div>
+        <div>
+          <div class="pstep-name">Scale</div>
+          <div class="pstep-desc">Once the system is proven, we expand — more channels, more agents, more automation layers. You close deals. We handle the rest.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="terminal reveal">
+      <div class="term-bar">
+        <div class="tdot td1"></div>
+        <div class="tdot td2"></div>
+        <div class="tdot td3"></div>
+        <div class="term-title">ea-agent-army · live</div>
+      </div>
+      <div class="term-body">
+        <div class="tl"><span class="pr">ea</span> <span class="dim">~</span> <span class="cmd">initializing lead scan...</span></div>
+        <div class="tl"><span class="ok">✓</span> Apollo connected · 2,400 prospects found</div>
+        <div class="tl"><span class="ok">✓</span> ICP filter applied · <span class="hi">847 qualified</span></div>
+        <div class="tl"><span class="dim">—</span> Enriching with LinkedIn data...</div>
+        <div class="tl"><span class="ok">✓</span> Claude generating personalized sequences</div>
+        <div class="tl"><span class="ok">✓</span> 847 emails queued · sending at optimal time</div>
+        <div class="tl"><span class="dim">—</span> Monitoring replies...</div>
+        <div class="tl"><span class="ok">✓</span> <span class="hi">12 hot leads</span> detected · routing to voice agent</div>
+        <div class="tl"><span class="ok">✓</span> ElevenLabs dialing via Twilio...</div>
+        <div class="tl"><span class="ok">✓</span> <span class="hi">3 meetings booked</span> · logged to CRM</div>
+        <div class="tl"><span class="pr">ea</span> <span class="dim">~</span> <span class="cblink"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="section">
+  <div class="sec-eyebrow reveal">Investment</div>
+  <div class="sec-title reveal">Pick your<br><em>deployment tier.</em></div>
+  <div class="price-grid">
+
+    <div class="price-card reveal">
+      <div class="plan-tier">Starter</div>
+      <div class="plan-p"><sup>$</sup>497</div>
+      <div class="plan-mo">/ month</div>
+      <div class="plan-div"></div>
+      <div class="plan-feats">
+        <div class="plan-feat"><span class="pf-check">▸</span>Lead generation (250/mo)</div>
+        <div class="plan-feat"><span class="pf-check">▸</span>Email sequences (Claude)</div>
+        <div class="plan-feat"><span class="pf-check">▸</span>CRM auto-logging</div>
+        <div class="plan-feat"><span class="pf-check">▸</span>Weekly report</div>
+        <div class="plan-feat"><span class="pf-check">▸</span>1 revision / month</div>
+      </div>
+      <a href="https://buy.stripe.com/6oUaEY6yb3T2c3Z6ay83C02" target="_blank" class="plan-btn">Deploy Starter</a>
+    </div>
+
+    <div class="price-card feat reveal">
+      <div class="plan-badge">Most Popular</div>
+      <div class="plan-tier">Growth</div>
+      <div class="plan-p"><sup>$</sup>997</div>
+      <div class="plan-mo">/ month</div>
+      <div class="plan-div"></div>
+      <div class="plan-feats">
+        <div class="plan-feat"><span class="pf-check">▸</span>Lead generation (500/mo)</div>
+        <div class="plan-feat"><span class="pf-check">▸</span>Email + voice calling</div>
+        <div class="plan-feat"><span class="pf-check">▸</span>Instagram DM automation</div>
+        <div class="plan-feat"><span class="pf-check">▸</span>CRM + Command Center</div>
+        <div class="plan-feat"><span class="pf-check">▸</span>Daily 7am report</div>
+        <div class="plan-feat"><span class="pf-check">▸</span>Unlimited revisions</div>
+      </div>
+      <a href="https://buy.stripe.com/3cIbJ26yb75e9VR56u83C03" target="_blank" class="plan-btn">Deploy Growth</a>
+    </div>
+
+    <div class="price-card reveal">
+      <div class="plan-tier">Elite</div>
+      <div class="plan-p"><sup>$</sup>1,997</div>
+      <div class="plan-mo">/ month</div>
+      <div class="plan-div"></div>
+      <div class="plan-feats">
+        <div class="plan-feat"><span class="pf-check">▸</span>Full 11-agent army</div>
+        <div class="plan-feat"><span class="pf-check">▸</span>Unlimited leads</div>
+        <div class="plan-feat"><span class="pf-check">▸</span>Custom AI voice clone</div>
+        <div class="plan-feat"><span class="pf-check">▸</span>Multi-channel outreach</div>
+        <div class="plan-feat"><span class="pf-check">▸</span>Dedicated build team</div>
+        <div class="plan-feat"><span class="pf-check">▸</span>Weekly strategy PDF guide</div>
+      </div>
+      <a href="https://buy.stripe.com/28E14o9Kn4X61pl42q83C01" target="_blank" class="plan-btn">Deploy Elite</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- SIGNUP -->
+<section id="signup" class="section">
+  <div class="su-layout">
+    <div class="reveal">
+      <div class="sec-eyebrow">Get Started</div>
+      <div class="sec-title" style="margin-bottom:20px;">Ready to deploy<br><em>your army?</em></div>
+      <div style="font-size:13px;line-height:1.9;color:var(--muted);margin-bottom:28px;">Tell us about your business and we'll build a custom automation strategy — no obligation, just clarity on what's possible.</div>
+      <div class="su-feats">
+        <div class="su-feat"><div class="su-dot"></div>Free 30-min strategy call</div>
+        <div class="su-feat"><div class="su-dot"></div>Custom automation roadmap</div>
+        <div class="su-feat"><div class="su-dot"></div>Live demo of your agent army</div>
+        <div class="su-feat"><div class="su-dot"></div>No contracts, cancel anytime</div>
+      </div>
+    </div>
+
+    <div class="su-form reveal">
+      <div class="form-hd">Deploy Request</div>
+      <form class="form-fs" action="https://formspree.io/f/mojrkegb" method="POST">
+        <div class="form-f">
+          <div class="form-lbl">Full Name</div>
+          <input class="form-inp" type="text" name="name" placeholder="John Smith" required>
+        </div>
+        <div class="form-f">
+          <div class="form-lbl">Email</div>
+          <input class="form-inp" type="email" name="email" placeholder="john@company.com" required>
+        </div>
+        <div class="form-f">
+          <div class="form-lbl">Business Type</div>
+          <select class="form-sel" name="business_type">
+            <option value="">Select...</option>
+            <option>Agency</option>
+            <option>SaaS / Tech</option>
+            <option>Consulting</option>
+            <option>E-commerce</option>
+            <option>Real Estate</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-f">
+          <div class="form-lbl">Monthly Revenue</div>
+          <select class="form-sel" name="revenue">
+            <option value="">Select...</option>
+            <option>Pre-revenue</option>
+            <option>$1k – $10k</option>
+            <option>$10k – $50k</option>
+            <option>$50k – $100k</option>
+            <option>$100k+</option>
+          </select>
+        </div>
+        <button type="submit" class="form-sub">[ Deploy My Army ]</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-brand">
+    <div class="nav-dot" style="width:5px;height:5px;"></div>
+    Elevated Automations
+  </div>
+  <div class="ft-links">
+    <a href="#services">Services</a>
+    <a href="#process">Process</a>
+    <a href="#pricing">Pricing</a>
+    <a href="mailto:hello@elevatedautomations.org">Contact</a>
+  </div>
+  <div class="ft-copy">© 2026 Elevated Automations</div>
+</footer>
+
+<script>
+// Cursor
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+if(cur && ring){
+  document.addEventListener('mousemove', e => {
+    cur.style.left = e.clientX - 3 + 'px';
+    cur.style.top  = e.clientY - 3 + 'px';
+    ring.style.left = e.clientX - 14 + 'px';
+    ring.style.top  = e.clientY - 14 + 'px';
+  });
+}
+
+// Hamburger
+const ham = document.getElementById('navHam');
+const links = document.getElementById('navLinks');
+if(ham && links){
+  ham.addEventListener('click', () => {
+    links.classList.toggle('open');
+  });
+  // Close on link tap
+  links.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => links.classList.remove('open'));
+  });
+}
+
+// Reveal on scroll
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
