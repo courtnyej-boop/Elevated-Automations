@@ -1,0 +1,297 @@
+{
+  "name": "Lead Search",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "b3dd4116-147e-45c3-ae6d-0ebae6bb59ce",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b1600ced-91f4-41cf-bc48-2ff5dcc0df95",
+      "name": "Webhook",
+      "webhookId": "b3dd4116-147e-45c3-ae6d-0ebae6bb59ce"
+    },
+    {
+      "parameters": {
+        "url": "https://serpapi.com/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "engine",
+              "value": "google"
+            },
+            {
+              "name": "q",
+              "value": "=={{ .body.niche + ' ' + .body.title + (.body.location ? ' ' + .body.location : '') + ' site:linkedin.com' }}"
+            },
+            {
+              "name": "api_key",
+              "value": "cf3cb42caeceafb2c74f49f759037cb0df15dd67ab9bf9f62fbbf070d29f5504"
+            },
+            {
+              "name": "num",
+              "value": "10"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "f7e46906-da33-40cd-8eff-a02a63ff59e5",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = $('HTTP Request').first().json.organic_results || [];\nconst webhookBody = $('Webhook').first().json.body || {};\nconst niche = webhookBody.niche || 'Property Management';\nconst titleInput = webhookBody.title || 'Property Manager';\nconst location = webhookBody.location || '';\n\nreturn results.slice(0, 10).map(r => {\n  const rawTitle = r.title || '';\n  const snippet = r.snippet || '';\n  const link = r.link || '';\n\n  // Extract name \u2014 everything before first pipe, dash, or dot\n  let name = rawTitle.split(/[|\u00b7]/)[0].trim();\n  name = name.split(' - ')[0].trim();\n\n  // Extract company from snippet or title\n  let company = '';\n  const atMatchSnippet = snippet.match(/(?:at|@)\\s+([A-Z][A-Za-z0-9&,\\s\\.]+?)(?:\\s*[|\u00b7\\-]|\\.|,|$)/);\n  const atMatchTitle = rawTitle.match(/(?:at|@)\\s+([A-Z][A-Za-z0-9&,\\s\\.]+?)(?:\\s*[|\u00b7\\-]|$)/);\n  if (atMatchSnippet) company = atMatchSnippet[1].trim();\n  else if (atMatchTitle) company = atMatchTitle[1].trim();\n\n  // Extract job title from snippet\n  let extractedTitle = titleInput;\n  const titleMatch = snippet.match(/(President|CEO|Founder|Owner|Director|Manager|VP|COO|CTO|CFO|Principal)[^,.|\\n]{0,40}/);\n  if (titleMatch) extractedTitle = titleMatch[0].trim();\n\n  // Score based on quality signals\n  let score = 5;\n  if (snippet.length > 150) score += 2;\n  if (link.includes('linkedin.com/in/')) score += 2;\n  if (company) score += 1;\n  score = Math.min(score, 10);\n\n  return {\n    json: {\n      Name: name,\n      Email: '',\n      Company: company,\n      Title: extractedTitle,\n      Niche: niche + (location ? ' - ' + location : ''),\n      Score: score,\n      Status: 'New',\n      Date: new Date().toISOString().split('T')[0],\n      search_metadata: link\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "9605ef08-59b5-40e4-87ce-5c042f89fe88",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1n0rjbAJkEraBPOY7jnbr9ks-ZfT1P9p2nn0SzXZYgIk",
+          "mode": "list",
+          "cachedResultName": "EA Lead Finder CRM",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1n0rjbAJkEraBPOY7jnbr9ks-ZfT1P9p2nn0SzXZYgIk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1n0rjbAJkEraBPOY7jnbr9ks-ZfT1P9p2nn0SzXZYgIk/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.Name }}",
+            "Email": "={{ $json.Email }}",
+            "Company": "={{ $json.Company }}",
+            "Title": "={{ $json.Title }}",
+            "Niche": "={{ $json.Niche }}",
+            "Score": "={{ $json.Score }}",
+            "Status": "={{ $json.Status }}",
+            "Date": "={{ $json.Date }}",
+            "search_metadata": "={{ $json.search_metadata }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Niche",
+              "displayName": "Niche",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Score",
+              "displayName": "Score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "search_metadata",
+              "displayName": "search_metadata",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        624,
+        0
+      ],
+      "id": "414c69d3-42a8-46f5-b43a-d83032b6ec7c",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KrUxG89VUCw1fexS",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "Leads logged to EA Lead Finder CRM",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        832,
+        0
+      ],
+      "id": "feb25982-a474-44ca-af29-f4815dbeea19",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {},
+          "params": {},
+          "query": {},
+          "body": {
+            "niche": "Property Management",
+            "title": "Property Manager",
+            "location": "Florida"
+          },
+          "webhookUrl": "https://cjnf.app.n8n.cloud/webhook/b3dd4116-147e-45c3-ae6d-0ebae6bb59ce",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "3b7623b3-e4c8-430e-a235-eae9e3dc6fae",
+  "meta": {
+    "instanceId": "7031b413675b790ee1db3dd380211fa5e806926eabbe18280c7bcfddad75da16"
+  },
+  "id": "T5KbBs8H7v59wJBI",
+  "tags": []
+}
